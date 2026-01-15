@@ -1,7 +1,6 @@
 // PROJECTE FINAL DE INFORMATICA ESEIAAT 2025-2026
 // Rafael Gras, Mykola Stefanskyy, Albert Sabadell
-// Versió 0.1.0 per Rafael Gras
-// Canvis: Acabar els subprogrames de l'entitat 1
+// Versió 0.1.1 per Albert Sabadell
 
 #include <iostream>
 #include <fstream>
@@ -28,6 +27,13 @@ struct t_comanda { // tupla de entidad 4
     string info;
     string hora;
 };
+struct t_log {             //tupla registro de acciones
+    int id;
+    string entitat;
+    string operacio;
+    string detall;
+};
+
 
 struct t_denuncia{ // tupla de entidad 1
     int any, mes, dia, hora, minuto;
@@ -55,6 +61,10 @@ typedef vector<t_imposicio> v_imposicio;
 
 typedef vector<t_multa> v_multa;
 
+typedef vector<t_log> v_log;
+int contadorLogs = 1; // contador global de logs
+v_log logs;
+
 typedef vector<t_dencodigo> v_dencodigo;
 
 // Los nombres de  calles, distritos y barrios se guardan en vectores separados para facilitar la introduccion de estos nombres por parte del usuario:
@@ -74,7 +84,8 @@ struct t_zonas { // Tupla que agrupa vectores de distritos, barrios, y calles, p
 // Parámetros:
 const string FICHERO_DENUNCIAS_BARCELONA = "2024_4t_denuncies_sancions_transit_detall.txt";
 const string FICHERO_CODIGO_SANCIONES = "codis-nico.txt";
-const string FICHERO_SUBTIPUS_EXPEDIENT = "2024_denuncies_sancions_transit_conceptes_annex.csv";
+const string FICHERO_SUBTIPUS_EXPEDIENT = "2024_denuncies_sancions_transit_conceptes_annex.txt";
+const string FICHERO_LOGS = "logs_comandes.txt";
 
 const bool LIMITAR_LECTURA = false; // Limita la lectura de denuncias a solo 50000 denuncias
 const int BARRIOS_BCN = 74; // Hay 73 pero sumamos uno para poder hacer barrio[73]
@@ -131,7 +142,7 @@ void AnadirInfoE2(v_multa&v1);
 void EliminarInfoE2(v_multa&v1);
 void ModificarInfoE2(v_multa&v1);
 
-//Subprogramas Albert Sabadell
+//Subprogramas Albert Sabadell Enitdad 3 y 4
 
 bool MenuEntidad3(v_imposicio& v3);
 void LecturaFicheroE3(v_imposicio& v3);
@@ -140,6 +151,10 @@ void ConsultaInfoE3(const v_imposicio& v3);
 void AnadirInfoE3(v_imposicio& v3);
 void EliminarInfoE3(v_imposicio& v3);
 void ModificarInfoE3(v_imposicio& v3);
+
+void RegistrarLog(v_log& logs, string entitat, string operacio, string detall);   // Entidad de registro de cambios
+void GuardarLogs(const v_log& logs);
+void LecturaLogs(v_log& logs);
 
 // Subprogramas Rafael Gras: Entidad 1
 bool MenuEntidad1(v_denuncia& v1, t_zonas& z, const v_multa& v2);
@@ -166,6 +181,8 @@ int main(){
     setlocale(LC_ALL, "Catalan_Spain.1252"); // Esta función no estrictamente necesaria pero sirve para mostrar todos los carácteres del alfabeto español en la salido cout
     cout << "Inicializando Gestor-Denuncias-Barcelona..." << endl << endl;
 
+    LecturaLogs(logs);
+
     cout << "Leyendo fichero " << FICHERO_DENUNCIAS_BARCELONA << endl;
     v_denuncia v1; // Entidad 1
     t_zonas z;
@@ -187,6 +204,8 @@ int main(){
     LecturaFicheroE3(v3);
 
     while (!Menu(v1, v2, v3, z)); // El programa se acaba cuando Menu() devuelve true (el usuario ha solicitado salir del programa)
+
+    GuardarLogs(logs);
 }
 
 bool Menu(v_denuncia&v1, v_multa&v2, v_imposicio&v3, t_zonas& z) { // Devuelve true cuando el programa debe finalizar
@@ -315,6 +334,8 @@ void AnadirInfoE2(v_multa&v1){
         cin >> nuevo.tipus >> nuevo.punts_retirar;
 
         v1.push_back(nuevo);
+        RegistrarLog(logs, "Multa", "Alta", to_string(nuevo.codi));
+
         ModificarFicheroE2(v1);
         cout << endl << "Infracción añadida correctamente." << endl << endl;
 
@@ -442,74 +463,58 @@ bool MenuEntidad2(v_multa&v2) {
    }
 
 // Subprogramas de Albert Sabadell
+
 void LecturaFicheroE3(v_imposicio& v3) {
 
     ifstream cinf(FICHERO_SUBTIPUS_EXPEDIENT);
+    t_imposicio x;
+    string basura;
 
-    string linea, palabra;
-    getline(cinf, linea);
+    // Saltamos la cabecera (4 columnas)
+    cinf >> basura >> basura >> basura >> basura;
 
-    while (getline(cinf, linea)) {
-        t_imposicio x;
-        size_t pos = 0;
-        int col = 0;
-
-        while ((pos = linea.find(',')) != string::npos) {
-            palabra = linea.substr(0, pos);
-            linea.erase(0, pos + 1);
-
-            // eliminar posibles comillas
-            if (!palabra.empty() && palabra[0] == '"') palabra = palabra.substr(1, palabra.size()-2);
-
-            if (col == 0) x.concepte = palabra;
-            else if (col == 1) x.valor = palabra;
-            else if (col == 2) x.valordesc_ca = palabra;
-            else if (col == 3) x.valordesc_es = palabra;
-
-            col++;
-        }
-
-        if (!linea.empty()) x.valordesc_es = linea;
-
+    while (cinf >> x.concepte >> x.valor >> x.valordesc_ca >> x.valordesc_es) {
         v3.push_back(x);
     }
 }
 
 void ModificarFicheroE3(const v_imposicio& v3){
+
     ofstream fout(FICHERO_SUBTIPUS_EXPEDIENT);
 
-    // Usamos esto para la Cabecera
-    fout << "Concepte,Valor,Descripcio_CA,Descripcio_ES";
+    // Cabecera
+    fout << "Concepte Valor Descripcio_CA Descripcio_ES";
 
     for (int i = 0; i < v3.size(); i++){
         fout << endl;
-        fout << v3[i].concepte << "," << v3[i].valor << ","
-             << v3[i].valordesc_ca << "," << v3[i].valordesc_es;
+        fout << v3[i].concepte << " "
+             << v3[i].valor << " "
+             << v3[i].valordesc_ca << " "
+             << v3[i].valordesc_es;
     }
 }
 
 void AnadirInfoE3(v_imposicio& v3){
     t_imposicio nuevo;
 
-    cout << "Introduce el concepto: ";
-    cin.ignore();
-    getline(cin, nuevo.concepte);
+    cout << "Introduce el concepto (sin espacios, usa _): ";
+    cin >> nuevo.concepte;
 
-    cout << "Introduce el valor (código único): ";
+    cout << "Introduce el valor (codigo unico): ";
     cin >> nuevo.valor;
-    cin.ignore();
 
-    cout << "Introduce la descripción en catalán: ";
-    getline(cin, nuevo.valordesc_ca);
+    cout << "Introduce la descripcion en catalan: ";
+    cin >> nuevo.valordesc_ca;
 
-    cout << "Introduce la descripción en español: ";
-    getline(cin, nuevo.valordesc_es);
+    cout << "Introduce la descripcion en castellano: ";
+    cin >> nuevo.valordesc_es;
 
     v3.push_back(nuevo);
     ModificarFicheroE3(v3);
 
     cout << "Subtipo añadido correctamente." << endl << endl;
 }
+
 
 void EliminarInfoE3(v_imposicio& v3){
     string codigo;
@@ -533,29 +538,30 @@ void ModificarInfoE3(v_imposicio& v3){
     string codigo;
     bool encontrado = false;
 
-    cout << "Introduce el valor (código) del subtipo a modificar: ";
+    cout << "Introduce el valor (codigo) del subtipo a modificar: ";
     cin >> codigo;
-    cin.ignore();
 
     for (int i = 0; i < v3.size() && !encontrado; i++){
         if (v3[i].valor == codigo){
             encontrado = true;
 
-            cout << "Nuevo concepto (actual: " << v3[i].concepte << "): ";
-            getline(cin, v3[i].concepte);
+            cout << "Nuevo concepto: ";
+            cin >> v3[i].concepte;
 
-            cout << "Nueva descripción en catalán (actual: " << v3[i].valordesc_ca << "): ";
-            getline(cin, v3[i].valordesc_ca);
+            cout << "Nueva descripcion en catalan: ";
+            cin >> v3[i].valordesc_ca;
 
-            cout << "Nueva descripción en español (actual: " << v3[i].valordesc_es << "): ";
-            getline(cin, v3[i].valordesc_es);
+            cout << "Nueva descripcion en castellano: ";
+            cin >> v3[i].valordesc_es;
 
             ModificarFicheroE3(v3);
             cout << "Subtipo modificado correctamente." << endl << endl;
         }
     }
-    if (!encontrado) cout << "No se encontró el subtipo." << endl << endl;
+    if (!encontrado)
+        cout << "No se encontro el subtipo." << endl << endl;
 }
+
 
 void ConsultaInfoE3(const v_imposicio& v3) {
     string codigo;
@@ -867,12 +873,17 @@ void AnadirInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
     cout << "A continuación debes introducir los datos de la denuncia que desea generar: " << endl;
     t_denuncia d = GenerarDenuncia(z, true, v2);
     v1.push_back(d);
+    RegistrarLog(logs, "Denuncia", "Alta", to_string(d.infraccio_codi));
     ModificarFicheroE1(v1,z);
     cout << "Denuncia registrada." << endl;
 }
 
 void EliminarInfoE1(v_denuncia& v1, const t_zonas& z, int indice) {
     if (v1.size() >= 2 and indice < v1.size() and indice > 0){
+
+            RegistrarLog(logs, "Denuncia", "Baja",
+                     to_string(v1[indice].infraccio_codi));
+
         int i=indice;
         int f=v1.size()-2;
         while (i<=f) {
@@ -1118,6 +1129,39 @@ void BuscadorDenunciasCantidad(const v_denuncia&v1, const v_multa&v2){
 
     }
 
+void RegistrarLog(v_log& logs, string entitat, string operacio, string detall) {
+    t_log l;
+    l.id = contadorLogs;
+    contadorLogs++;
+    l.entitat = entitat;
+    l.operacio = operacio;
+    l.detall = detall;
+    logs.push_back(l);
+}
 
+void GuardarLogs(const v_log& logs) {
+    ofstream fout(FICHERO_LOGS);
 
+    fout << "ID ENTIDAD OPERACION DETALLE" << endl;
 
+    for (int i = 0; i < logs.size(); i++) {
+        fout << logs[i].id << " "
+             << logs[i].entitat << " "
+             << logs[i].operacio << " "
+             << logs[i].detall << endl;
+    }
+}
+
+void LecturaLogs(v_log& logs) {
+    ifstream fin(FICHERO_LOGS);
+    t_log l;
+
+    if (!fin) return;
+
+    fin >> l.id >> l.entitat >> l.operacio >> l.detall;
+    while (fin) {
+        logs.push_back(l);
+        contadorLogs = l.id + 1;
+        fin >> l.id >> l.entitat >> l.operacio >> l.detall;
+    }
+}
