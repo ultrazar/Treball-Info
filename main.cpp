@@ -1,7 +1,7 @@
 // PROJECTE FINAL DE INFORMATICA ESEIAAT 2025-2026
 // Rafael Gras, Mykola Stefanskyy, Albert Sabadell
-// Versió 0.0. per Mykola Stefanskyy
-// Canvis:
+// Versió 0.0.6 per Rafael Gras
+// Canvis: Afegir la lectura de la entitat 1
 
 #include <iostream>
 #include <fstream>
@@ -29,15 +29,28 @@ struct t_comanda {
     string hora;
 };
 
+struct t_denuncia{
+    int any, mes, dia, hora, minuto;
+    string nom_carrer, nom_districte, nom_barri, subtipus_exp, mitja_impos, tipus_vehicle;
+    int codi_carrer, num_carrer, codi_districte, codi_barri, seccio_censal, import, infraccio_codi;
+    float longitud, latitud;
+    bool grua;
+};
+
+typedef vector<t_denuncia> v_denuncia;
+
 typedef vector<t_comanda> v_comandes;
 
 typedef vector<t_imposicio> v_imposicio;
 
 typedef vector<t_multa> v_multa;
 
+// Parámetros:
+const string FICHERO_DENUNCIAS_BARCELONA = "2024_4t_denuncies_sancions_transit_detall.txt";
 const string FICHERO_CODIGO_SANCIONES = "codis-nico.txt";
 const string FICHERO_SUBTIPUS_EXPEDIENT = "2024_denuncies_sancions_transit_conceptes_annex.csv"; // Entidad 3 y 4
 
+const bool LIMITAR_LECTURA = true; // Limita la lectura de denuncias a solo 50000 denuncias
 
 const string MENU_PRINCIPAL =
 "\nSelecciona que tipo de accion desea hacer:\n"
@@ -50,6 +63,7 @@ const string MENU_PRINCIPAL =
 "7. Salir del programa \n --> ";
 
 
+
 const string MENU_ENTIDAD_2 =
 "¿Qué quiere hacer con la entidad \"2: tipos de multas\"?\n"
 "1. Consultar la información sobre un tipo de multa.\n"
@@ -58,7 +72,7 @@ const string MENU_ENTIDAD_2 =
 "4. Modificar un tipo de multa.\n -->";
 
 //Subprogramas de Mykola Stefansky: Menu y Entidad 2 (multas)
-bool Menu(v_multa& v2, v_imposicio& v3);
+bool Menu(v_denuncia& v1, v_multa& v2, v_imposicio& v3);
 void SalidaSinBarrasBajas(string palabra);
 void BusquedaVectores1(const v_multa&v1, int&n, bool&trobat, int codigo);
 void LecturaFicheroE2(v_multa&v1);
@@ -78,13 +92,26 @@ void AnadirInfoE3(v_imposicio& v3);
 void EliminarInfoE3(v_imposicio& v3);
 void ModificarInfoE3(v_imposicio& v3);
 
-// Subprogramas Rafael Gras
+// Subprogramas Rafael Gras: Entidad 1
+bool MenuEntidad1(v_denuncia& v1);
+void LecturaFicheroE1(v_denuncia& v1);
+void ModificarFicheroE1(v_denuncia& v1);
+void ConsultaInfoE1(v_denuncia& v1);
+void AnadirInfoE1(v_denuncia& v1);
+void EliminarInfoE1(v_denuncia& v1);
+void ModificarInfoE1(v_denuncia& v1);
 
 
 int main(){
     setlocale(LC_ALL,""); // Esta función no estrictamente necesaria pero sirve para mostrar todos los carácteres del alfabeto español en la salido cout
 
     cout << "Inicializando Gestor-Denuncias-Barcelona..." << endl << endl;
+
+    cout << "Leyendo fichero " << FICHERO_DENUNCIAS_BARCELONA << endl;
+    v_denuncia v1;
+    LecturaFicheroE1(v1);
+    cout << "Se han cargado "  << v1.size() << " denuncias de tráfico" << endl;
+
 
     cout << "Leyendo fichero " << FICHERO_CODIGO_SANCIONES << endl;
     v_multa v2;
@@ -94,17 +121,18 @@ int main(){
     v_imposicio v3;
     LecturaFicheroE3(v3);
 
-    while (!Menu(v2, v3)); // El programa se acaba cuando Menu() devuelve true (el usuario ha solicitado salir del programa)
+    while (!Menu(v1, v2, v3)); // El programa se acaba cuando Menu() devuelve true (el usuario ha solicitado salir del programa)
 }
 
-bool Menu(v_multa& v2, v_imposicio& v3) { // Devuelve true cuando el programa debe finalizar
+bool Menu(v_denuncia& v1, v_multa& v2, v_imposicio& v3) { // Devuelve true cuando el programa debe finalizar
     int opcion, opcion2;
     cout << MENU_PRINCIPAL;
     cin >> opcion;
 
+
     switch (opcion) {
         case 1: {
-            cout << "Pendiente de hacer..." << endl;
+            while (!MenuEntidad1(v1));
             break; }
         case 2: {
             cout << MENU_ENTIDAD_2;
@@ -138,6 +166,7 @@ bool Menu(v_multa& v2, v_imposicio& v3) { // Devuelve true cuando el programa de
     return opcion == 7;
 }
 
+// Subprogramas de Mykola Stefansky
 void SalidaSinBarrasBajas(string palabra){
     for (int i = 0; i < palabra.size(); i++){
         if (palabra[i] != '_') cout << palabra[i];
@@ -262,7 +291,6 @@ void ModificarInfoE2(v_multa&v1){
     int n = 0, codigo, opcionmod = 0;
     bool k;
     string opcionlong;
-    char basura;
 
     cout << "Introduce el código de la multa a modificar: ";
     cin >> codigo;
@@ -280,7 +308,7 @@ void ModificarInfoE2(v_multa&v1){
                     else if (opcionmod == 2){
                         cout << "¿Corta o Larga? ";
                         cin >> opcionlong;
-                        while(cin.get(basura) && basura != '\n'); //Eliminamos la basura que queda (enter)
+
                         while (k){
                             if (opcionlong == "Corta"){
                                 cout << "Introduce tu texto (con barras bajas en los espacios): ";
@@ -294,12 +322,12 @@ void ModificarInfoE2(v_multa&v1){
                                 v1[n].descllargaCA = mod.descllargaCA;
                                 k = false;
                                     }
-                            else cout << "Introduce una opción válida" << endl;}
+                            else {cout << "Introduce una opción válida" << endl; cin >> opcionlong;}
+                            }
                             }
                     else if (opcionmod == 3){
                         cout << "¿Corta o Larga? ";
                         cin >> opcionlong;
-                        while(cin.get(basura) && basura != '\n'); //Eliminamos la basura que queda (enter)
                         while (k){
                             if (opcionlong == "Corta"){
                                 cout << "Introduce tu texto (con barras bajas en los espacios): ";
@@ -311,7 +339,9 @@ void ModificarInfoE2(v_multa&v1){
                                 cout << "Introduce tu texto (con barras bajas en los espacios): ";
                                 cin >> mod.descllargaES;
                                 v1[n].descllargaES = mod.descllargaES;
-                                k = false;}}
+                                k = false;}
+                            else {cout << "Introduce una opción válida" << endl; cin >> opcionlong; }
+                            }
                                              }
                     else if (opcionmod == 4){
                         cout << "Introduce la nueva normativa: ";
@@ -338,6 +368,7 @@ void ModificarInfoE2(v_multa&v1){
 }
 
 
+// Subprogramas de Albert Sabadell
 void LecturaFicheroE3(v_imposicio& v3) {
 
     ifstream cinf(FICHERO_SUBTIPUS_EXPEDIENT);
@@ -453,7 +484,6 @@ void ModificarInfoE3(v_imposicio& v3){
     if (!encontrado) cout << "No se encontró el subtipo." << endl << endl;
 }
 
-
 void ConsultaInfoE3(const v_imposicio& v3) {
     string codigo;
     bool trobat = false;
@@ -494,6 +524,67 @@ bool MenuEntidad3(v_imposicio& v3) {
    }
 
 
+// Subprogramas de Rafael Gras
+
+void LecturaFicheroE1(v_denuncia& v1) {
+    ifstream cinf(FICHERO_DENUNCIAS_BARCELONA);
+    v1 = v_denuncia();
+    t_denuncia t;
+    char b, grua;
+    int tiempo, k=1;
+    string bs;
+    for (int i=0; i< 18;i++) cinf >> bs; // eliminamos la primera fila (tenemos 18 columnas)
+    bool continuar = true;
+    while (cinf >> t.any >> b >> t.mes >> b >> t.dia >> tiempo
+           >> t.codi_carrer >> t.nom_carrer >> t.num_carrer >> t.codi_districte
+           >> t.nom_districte >> t.codi_barri >> t.nom_barri >> t.seccio_censal
+           >> t.longitud >> t.latitud >> t.infraccio_codi >> t.subtipus_exp
+           >> grua >> t.mitja_impos >> t.tipus_vehicle >> t.import and continuar ) {
+        tiempo = tiempo / 100;
+        t.minuto = tiempo % 100; // extraemos los minutos
+        t.hora = (tiempo / 100); // extraemos las horas
+        t.grua = (grua=='X');
+        v1.push_back(t);
+
+        if ((k%50000)==0) {if (LIMITAR_LECTURA) continuar=false; else cout << "Se han leído " << k << " denuncias" << endl;}
+        k++;
+
+    }
+}
+
+bool MenuEntidad1(v_denuncia& v1) {
+    int opcion;
+    cout << "\nMenu Entidad 1: Denuncias de tráfico en Barcelona\n"
+         << "1. Consultar información sobre una denuncia\n"
+         << "2. Añadir una denuncia\n"
+         << "3. Eliminar una denuncia\n"
+         << "4. Modificar una denuncia\n"
+         << "5. Salir\n--> ";
+    cin >> opcion;
+    bool retorno=false;
+
+    switch(opcion) {
+        case 1: ConsultaInfoE1(v1); break;
+        case 2: AnadirInfoE1(v1); break;
+        case 3: EliminarInfoE1(v1); break;
+        case 4: ModificarInfoE1(v1); break;
+        case 5: break;
+        default: cout << "Opción no válida" << endl; break;
+    }
+    return opcion == 5;
+}
+
+void ModificarFicheroE1(v_denuncia& v1) {
+
+}
+void ConsultaInfoE1(v_denuncia& v1) {
+}
+void AnadirInfoE1(v_denuncia& v1) {
+}
+void EliminarInfoE1(v_denuncia& v1) {
+}
+void ModificarInfoE1(v_denuncia& v1) {
+}
 
 
 
