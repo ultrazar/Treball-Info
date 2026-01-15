@@ -1,8 +1,7 @@
 // PROJECTE FINAL DE INFORMATICA ESEIAAT 2025-2026
 // Rafael Gras, Mykola Stefanskyy, Albert Sabadell
-// Versió 0.0.4 per Albert Sabadell
+// Versió 0.0. per Mykola Stefanskyy
 // Canvis:
-// --> Añadir subprogramas Entidad 3 i comenzar Entidad 4
 
 #include <iostream>
 #include <fstream>
@@ -36,7 +35,7 @@ typedef vector<t_imposicio> v_imposicio;
 
 typedef vector<t_multa> v_multa;
 
-const string FICHERO_CODIGO_SANCIONES = "2024_denuncies_sancions_transit_codis.csv";
+const string FICHERO_CODIGO_SANCIONES = "codis-nico.txt";
 const string FICHERO_SUBTIPUS_EXPEDIENT = "2024_denuncies_sancions_transit_conceptes_annex.csv"; // Entidad 3 y 4
 
 
@@ -51,7 +50,6 @@ const string MENU_PRINCIPAL =
 "7. Salir del programa \n --> ";
 
 
-
 const string MENU_ENTIDAD_2 =
 "¿Qué quiere hacer con la entidad \"2: tipos de multas\"?\n"
 "1. Consultar la información sobre un tipo de multa.\n"
@@ -61,6 +59,8 @@ const string MENU_ENTIDAD_2 =
 
 //Subprogramas de Mykola Stefansky: Menu y Entidad 2 (multas)
 bool Menu(v_multa& v2, v_imposicio& v3);
+void SalidaSinBarrasBajas(string palabra);
+void BusquedaVectores1(const v_multa&v1, int&n, bool&trobat, int codigo);
 void LecturaFicheroE2(v_multa&v1);
 void ModificarFicheroE2(const v_multa&v1);
 void ConsultaInfoE2(const v_multa&v1);
@@ -138,44 +138,205 @@ bool Menu(v_multa& v2, v_imposicio& v3) { // Devuelve true cuando el programa de
     return opcion == 7;
 }
 
+void SalidaSinBarrasBajas(string palabra){
+    for (int i = 0; i < palabra.size(); i++){
+        if (palabra[i] != '_') cout << palabra[i];
+        else cout << " ";
+    }
+}
+
+void BusquedaVectores1(const v_multa&v1, int&n, bool&trobat, int codigo){
+    for (int i = 0; i < v1.size() && !trobat; i++){
+            if (v1[i].codi == codigo) {
+                    trobat = true;
+                    n = i;}}
+}
+
 void LecturaFicheroE2(v_multa&v1){
 
     ifstream cinf(FICHERO_CODIGO_SANCIONES);
-    string titulo, postcoma;
-    char coma;
-    int k = 0;
+    string titulo;
+    int i = 0;
     t_multa x;
 
-    cinf >> titulo; //Extraer titulos de los datos (primera linea)
-    while (cinf >> x.codi >> coma){ // Lectura y incorporacion al vector v1
-
-        //Utilizamos la función getline para poder leer hasta la siguiente coma y así leer solo la siguiente casilla del csv
-        getline(cinf, x.desccurtaCA,',');
-        while (x.desccurtaCA[0] == '"' && x.desccurtaCA[x.desccurtaCA.size()-1] != '"'){ //Los campos que tienen comas tienen " en un .csv al comienzo y, por lo tanto, comprobamos este caso para evitar incorrecciones en las lecturas
-            getline(cinf, postcoma, ',');
-            x.desccurtaCA = x.desccurtaCA + "," + postcoma;}
-
-        getline(cinf, x.desccurtaES,',');
-        while (x.desccurtaES[0] == '"' && x.desccurtaES[x.desccurtaES.size()-1] != '"'){
-            getline(cinf, postcoma, ',');
-            x.desccurtaES = x.desccurtaES + "," + postcoma;}
-
-        getline(cinf, x.descllargaCA,',');
-        while (x.descllargaCA[0] == '"' && x.descllargaCA[x.descllargaCA.size()-1] != '"'){
-            getline(cinf, postcoma, ',');
-            x.descllargaCA = x.descllargaCA + "," + postcoma;}
-
-        getline(cinf, x.descllargaES,',');
-        while (x.descllargaES[0] == '"' && x.descllargaES[x.descllargaES.size()-1] != '"'){
-            getline(cinf, postcoma, ',');
-            x.descllargaES = x.descllargaES + "," + postcoma;}
-
-        getline(cinf, x.norm,',');
-        cinf >> x.import >> coma >> x.tipus >> coma >> x.punts_retirar;
-
+    while (i < 9){cinf >> titulo; i++;} //Extraer titulos de los datos (primera linea)
+    while (cinf >> x.codi >> x.desccurtaCA >> x.desccurtaES >> x.descllargaCA >> x.descllargaES >> x.norm >> x.import >> x.tipus >> x.punts_retirar){ // Lectura y incorporacion al vector v1
         v1.push_back(x); //Introducimos los datos de la lectura en el vector
     }
 }
+
+void ModificarFicheroE2(const v_multa&v1){
+
+    ofstream couth(FICHERO_CODIGO_SANCIONES);
+
+    //Cabecera
+    couth << "Infraccio_Codi Infraccio_Desc_Curta_CA Infraccio_Desc_Curta_ES Infraccio_Desc_Llarga_CA Infraccio_Desc_Llarga_ES Normativa Import_Nominal Tipus_Infraccio Punts_A_Retirar";
+
+    for (int i = 0; i < v1.size(); i++){
+        couth << endl;
+        couth << v1[i].codi << " " << v1[i].desccurtaCA << " " << v1[i].desccurtaES << " ";
+        couth << v1[i].descllargaCA << " " << v1[i].descllargaES << " " << v1[i].norm << " ";
+        couth << v1[i].import << " " << v1[i].tipus << " " << v1[i].punts_retirar;
+    }
+}
+
+void ConsultaInfoE2(const v_multa&v1){
+        int leng = 1, n = 0;
+        bool trobat = false;
+        int codigo, opcionlenguaje;
+
+        cout << "Introduce el código de la infracción a consultar: ";
+        cin >> codigo;
+        BusquedaVectores1(v1, n, trobat, codigo);
+        if (!trobat) cout << "No se ha encontrado información." << endl << endl;
+        else {
+
+            while (leng != 0){
+                cout << "¿Cómo quiere ver las descripciones de la infracción? (En catalán (0) o en español (1))";
+                cin >> opcionlenguaje;
+                if (opcionlenguaje == 0){
+                cout << "DescCurtaCA: "; SalidaSinBarrasBajas(v1[n].desccurtaCA); cout << endl;
+                cout << "DescLlargaCA: "; SalidaSinBarrasBajas(v1[n].descllargaCA); cout << endl;
+                leng = 0;}
+                else if (opcionlenguaje == 1){
+                cout << "DescCurtaES: "; SalidaSinBarrasBajas(v1[n].desccurtaES); cout << endl;
+                cout << "DescLlargaES: "; SalidaSinBarrasBajas(v1[n].descllargaES); cout << endl;
+                leng = 0;}
+                else cout << "Introduce una opción válida.";}
+
+            cout << "Normativa: " << v1[n].norm << endl;
+            cout << "Importe nominal: " << v1[n].import << " euros. " << endl;
+            if (v1[n].tipus == 'E') cout << "Tipo: Estacionamiento" << endl;
+            else cout << "Tipo: En movimiento " << endl;
+            cout << "Puntos a retirar: " << v1[n].punts_retirar << endl;}
+}
+
+void AnadirInfoE2(v_multa&v1){
+
+        t_multa nuevo;
+        string enter;
+        cout << "Todas las oraciones se deben de introducir con los espacios sustituidos por '_'." << endl;
+        cout << "Introduce el nuevo código de la infracción: ";
+        cin >> nuevo.codi;
+        cout << "Introduce la descripción corta en catalán: ";
+        cin >> nuevo.desccurtaCA;
+        cout << "Introduce la descripción corta en castellano: ";
+        cin >> nuevo.desccurtaES;
+        cout << "Introduce la descripción larga en catalán: ";
+        cin >> nuevo.descllargaCA;
+        cout << "Introduce la descripción larga en castellano: ";
+        cin >> nuevo.descllargaES;
+        cout << "Introduce la normativa y el importe nominal: ";
+        cin >> nuevo.norm >> nuevo.import;
+        cout << "Introduce el tipo y los puntos a retirar: ";
+        cin >> nuevo.tipus >> nuevo.punts_retirar;
+
+        v1.push_back(nuevo);
+        ModificarFicheroE2(v1);
+        cout << endl << "Infracción añadida correctamente." << endl;
+
+}
+
+void EliminarInfoE2(v_multa&v1){
+
+    bool trobat = false;
+    int codigo;
+    cout << "Introduce el código de la multa a eliminar: ";
+    cin >> codigo;
+
+    for (int i = 0; i < v1.size() && !trobat; i++){
+        if (v1[i].codi == codigo){
+            trobat = true;
+            for (int k = i; k < v1.size()-1; k++){ //Eliminar y reorganizar el vector
+                v1[k] = v1[k+1];}
+                v1.pop_back();} //eliminem l'últim que queda repetit
+                ModificarFicheroE2(v1);
+             }
+    if (trobat) cout << endl << "Infracción eliminada correctamente" << endl << endl;
+    else cout << endl << "No se ha podido encontrar la infracción a eliminar" << endl << endl;
+}
+
+void ModificarInfoE2(v_multa&v1){
+    t_multa mod;
+    bool trobat = false, salir = false;
+    int n = 0, codigo, opcionmod = 0;
+    bool k;
+    string opcionlong;
+    char basura;
+
+    cout << "Introduce el código de la multa a modificar: ";
+    cin >> codigo;
+    BusquedaVectores1(v1, n, trobat, codigo);
+            if (trobat){
+                while(!salir){
+                    k = true;
+                    cout << "¿Qué deseas modificar? (Introduce el entero)" << endl << "1. Código de la infracción " << endl << "2. Descripción (CAT) " << endl << "3. Descripción (ESP) " << endl;
+                    cout << "4. Normativa " << endl << "5. Importe nominal " << endl << "6. Tipo de la infracción " << endl << "7. Puntos a retirar " << endl << "8. Salir" << endl;
+                    cin >> opcionmod;
+                    if (opcionmod == 1){
+                        cout << "Introduce el nuevo código: ";
+                        cin >> mod.codi;
+                        v1[n].codi = mod.codi;}
+                    else if (opcionmod == 2){
+                        cout << "¿Corta o Larga? ";
+                        cin >> opcionlong;
+                        while(cin.get(basura) && basura != '\n'); //Eliminamos la basura que queda (enter)
+                        while (k){
+                            if (opcionlong == "Corta"){
+                                cout << "Introduce tu texto (con barras bajas en los espacios): ";
+                                cin >> mod.desccurtaCA;
+                                v1[n].desccurtaCA = mod.desccurtaCA;
+                                k = false;
+                                    }
+                            else if (opcionlong == "Larga"){
+                                cout << "Introduce tu texto (con barras bajas en los espacios): ";
+                                cin >> mod.descllargaCA;
+                                v1[n].descllargaCA = mod.descllargaCA;
+                                k = false;
+                                    }
+                            else cout << "Introduce una opción válida" << endl;}
+                            }
+                    else if (opcionmod == 3){
+                        cout << "¿Corta o Larga? ";
+                        cin >> opcionlong;
+                        while(cin.get(basura) && basura != '\n'); //Eliminamos la basura que queda (enter)
+                        while (k){
+                            if (opcionlong == "Corta"){
+                                cout << "Introduce tu texto (con barras bajas en los espacios): ";
+                                cin >> mod.desccurtaES;
+                                v1[n].desccurtaES = mod.desccurtaES;
+                                k = false;
+                                        }
+                            else if (opcionlong == "Larga"){
+                                cout << "Introduce tu texto (con barras bajas en los espacios): ";
+                                cin >> mod.descllargaES;
+                                v1[n].descllargaES = mod.descllargaES;
+                                k = false;}}
+                                             }
+                    else if (opcionmod == 4){
+                        cout << "Introduce la nueva normativa: ";
+                        cin >> mod.norm;
+                        v1[n].norm = mod.norm;}
+                    else if (opcionmod == 5){
+                        cout << "Introduce el nuevo importe: ";
+                        cin >> mod.import;
+                        v1[n].import = mod.import;}
+                    else if (opcionmod == 6){
+                        cout << "Introduce el nuevo tipo: ";
+                        cin >> mod.tipus;
+                        v1[n].tipus = mod.tipus;}
+                    else if (opcionmod == 7){
+                        cout << "Introduce la nueva cantidad: ";
+                        cin >> mod.punts_retirar;
+                        v1[n].punts_retirar = mod.punts_retirar;}
+                    else if (opcionmod == 8) salir = true;
+                    else cout << "Introduce una entrada válida." << endl;}
+
+                    ModificarFicheroE2(v1);}
+
+                    else cout << endl << "No se ha podido encontrar la infracción a modificar" << endl << endl;
+}
+
 
 void LecturaFicheroE3(v_imposicio& v3) {
 
@@ -331,190 +492,6 @@ bool MenuEntidad3(v_imposicio& v3) {
         }
         return opcion == 5;
    }
-
-void ModificarFicheroE2(const v_multa&v1){
-
-    ofstream couth(FICHERO_CODIGO_SANCIONES);
-
-    //Cabecera
-    couth << "Infraccio_Codi,Infraccio_Desc_Curta_CA,Infraccio_Desc_Curta_ES,Infraccio_Desc_Llarga_CA,Infraccio_Desc_Llarga_ES,Normativa,Import_Nominal,Tipus_Infraccio,Punts_A_Retirar";
-
-    for (int i = 0; i < v1.size(); i++){
-        couth << endl;
-        couth << v1[i].codi << "," << v1[i].desccurtaCA << "," << v1[i].desccurtaES << ",";
-        couth << v1[i].descllargaCA << "," << v1[i].descllargaES << "," << v1[i].norm << ",";
-        couth << v1[i].import << "," << v1[i].tipus << "," << v1[i].punts_retirar;
-    }
-}
-
-void ConsultaInfoE2(const v_multa&v1){
-        int leng = 1, n = 0;
-        bool trobat = false;
-        int codigo, opcionlenguaje;
-
-        cout << "Introduce el código de la infracción a consultar: ";
-        cin >> codigo;
-
-        for (int i = 0; i < v1.size() && !trobat; i++){
-            if (v1[i].codi == codigo) {
-                    trobat = true;
-                    n = i;}}
-
-        if (!trobat) cout << "No se ha encontrado información." << endl << endl;
-        else {
-
-            while (leng != 0){
-                cout << "¿Cómo quiere ver las descripciones de la infracción? (En catalán (0) o en español (1))";
-                cin >> opcionlenguaje;
-                if (opcionlenguaje == 0){
-                cout << "DescCurtaCA: " << v1[n].desccurtaCA << endl;
-                cout << "DescLlargaCA: " << v1[n].descllargaCA << endl;
-                leng = 0;}
-                else if (opcionlenguaje == 1){
-                cout << "DescCurtaES: " << v1[n].desccurtaES << endl;
-                cout << "DescLlargaES: " << v1[n].descllargaES << endl;
-                leng = 0;}
-                else cout << "Introduce una opción válida.";}
-
-            cout << "Normativa: " << v1[n].norm << endl;
-            cout << "Importe nominal: " << v1[n].import << " euros. " << endl;
-            if (v1[n].tipus == 'E') cout << "Tipo: Estacionamiento" << endl;
-            else cout << "Tipo: En movimiento " << endl;
-            cout << "Puntos a retirar: " << v1[n].punts_retirar << endl << endl;}
-}
-
-void AnadirInfoE2(v_multa&v1){
-
-    t_multa nuevo;
-        string enter;
-
-        cout << "Introduce el nuevo código de la infracción: ";
-        cin >> nuevo.codi;
-        getline(cin, enter); // Para evitar que la siguiente entrada de datos no se interrumpa por el enter de la primera entrada
-        cout << "Introduce la descripción corta en catalán: ";
-        getline(cin, nuevo.desccurtaCA);
-        cout << "Introduce la descripción corta en castellano: ";
-        getline(cin, nuevo.desccurtaES);
-        cout << "Introduce la descripción larga en catalán: ";
-        getline(cin, nuevo.descllargaCA);
-        cout << "Introduce la descripción larga en castellano: ";
-        getline(cin, nuevo.descllargaES);
-        cout << "Introduce la normativa y el importe nominal: ";
-        cin >> nuevo.norm >> nuevo.import;
-        cout << "Introduce el tipo y los puntos a retirar: ";
-        cin >> nuevo.tipus >> nuevo.punts_retirar;
-
-        v1.push_back(nuevo);
-        ModificarFicheroE2(v1);
-        cout << endl << "Infracción añadida correctamente." << endl << endl;
-
-}
-
-void EliminarInfoE2(v_multa&v1){
-
-    bool trobat = false;
-    int codigo;
-    cout << "Introduce el código de la multa a eliminar: ";
-    cin >> codigo;
-
-    for (int i = 0; i < v1.size() && !trobat; i++){
-        if (v1[i].codi == codigo){
-            trobat = true;
-            for (int k = i; k < v1.size()-1; k++){ //Eliminar y reorganizar el vector
-                v1[k] = v1[k+1];}
-                v1.pop_back();} //eliminem l'últim que queda repetit
-                ModificarFicheroE2(v1);
-             }
-    if (trobat) cout << endl << "Infracción eliminada correctamente" << endl << endl;
-    else cout << endl << "No se ha podido encontrar la infracción a eliminar" << endl << endl;
-}
-
-void ModificarInfoE2(v_multa&v1){
-    t_multa mod;
-    bool trobat = false, salir = false;
-    int n = 0, codigo, opcionmod = 0;
-    bool k;
-    string opcionlong, basura;
-
-    cout << "Introduce el código de la multa a modificar: ";
-    cin >> codigo;
-    for (int i = 0; i < v1.size() && !trobat; i++){
-        if (v1[i].codi == codigo){
-            trobat = true;
-            n = i;}}
-            if (trobat){
-                while(!salir){
-                    k = true;
-                    cout << "¿Qué deseas modificar? (Introduce el entero)" << endl << "1. Código de la infracción " << endl << "2. Descripción (CAT) " << endl << "3. Descripción (ESP) " << endl;
-                    cout << "4. Normativa " << endl << "5. Importe nominal " << endl << "6. Tipo de la infracción " << endl << "7. Puntos a retirar " << endl << "8. Salir" << endl;
-                    cin >> opcionmod;
-                    if (opcionmod == 1){
-                        cout << "Introduce el nuevo código: ";
-                        cin >> mod.codi;
-                        v1[n].codi = mod.codi;}
-                    else if (opcionmod == 2){
-                        cout << "¿Corta o Larga? ";
-                        cin >> opcionlong;
-                        getline(cin, basura); //Eliminamos la basura que queda (enter)
-                        while (k){
-                            if (opcionlong == "Corta"){
-                                cout << "Introduce tu texto: ";
-                                getline(cin, mod.desccurtaCA);
-                                v1[n].desccurtaCA = mod.desccurtaCA;
-                                k = false;
-                                    }
-                            else if (opcionlong == "Larga"){
-                                cout << "Introduce tu texto: ";
-                                getline(cin, mod.descllargaCA);
-                                v1[n].descllargaCA = mod.descllargaCA;
-                                k = false;
-                                    }
-                            else cout << "Introduce una opción válida" << endl;}
-                            }
-                    else if (opcionmod == 3){
-                        cout << "¿Corta o Larga? ";
-                        cin >> opcionlong;
-                        getline(cin, basura); //Eliminamos la basura que queda (enter)
-                        while (k){
-                            if (opcionlong == "Corta"){
-                                cout << "Introduce tu texto: ";
-                                getline(cin, mod.desccurtaES);
-                                v1[n].desccurtaES = mod.desccurtaES;
-                                k = false;
-                                        }
-                            else if (opcionlong == "Larga"){
-                                cout << "Introduce tu texto: ";
-                                getline(cin, mod.descllargaES);
-                                v1[n].descllargaES = mod.descllargaES;
-                                k = false;}}
-                                             }
-                    else if (opcionmod == 4){
-                        cout << "Introduce la nueva normativa: ";
-                        cin >> mod.norm;
-                        v1[n].norm = mod.norm;}
-                    else if (opcionmod == 5){
-                        cout << "Introduce el nuevo importe: ";
-                        cin >> mod.import;
-                        v1[n].import = mod.import;}
-                    else if (opcionmod == 6){
-                        cout << "Introduce el nuevo tipo: ";
-                        cin >> mod.tipus;
-                        v1[n].tipus = mod.tipus;}
-                    else if (opcionmod == 7){
-                        cout << "Introduce la nueva cantidad: ";
-                        cin >> mod.punts_retirar;
-                        v1[n].punts_retirar = mod.punts_retirar;}
-                    else if (opcionmod == 8) salir = true;
-                    else cout << "Introduce una entrada válida." << endl;}
-
-                    ModificarFicheroE2(v1);}
-
-                    else cout << endl << "No se ha podido encontrar la infracción a modificar" << endl << endl;
-}
-
-
-
-
 
 
 
