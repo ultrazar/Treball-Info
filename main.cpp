@@ -1,10 +1,7 @@
 // PROJECTE FINAL DE INFORMATICA ESEIAAT 2025-2026
 // Rafael Gras, Mykola Stefanskyy, Albert Sabadell
-// Versió 0.0.8 per Rafael Gras
-// Canvis: Separar text menu Nico
-//         Subprogramas ModificarFicheroE1
-//         canviar float longitud/latitud a double para no perder precision
-//         Crear vectores y tuplas para distritos, calles, y barrios
+// Versió 0.1.0 per Rafael Gras
+// Canvis: Acabar els subprogrames de l'entitat 1
 
 #include <iostream>
 #include <fstream>
@@ -96,11 +93,9 @@ const string MENU_PRINCIPAL =
 
 const string MENU_ENTIDAD_1 =
 "\nMenu Entidad 1: Denuncias de tráfico en Barcelona\n"
-"1. Consultar información sobre denuncias en una franja de tiempo i/o en un sitio\n"
+"1. Consultar, modificar i/o eliminar denuncias\n"
 "2. Añadir una denuncia\n"
-"3. Eliminar una denuncia\n"
-"4. Modificar una denuncia\n"
-"5. Salir\n--> ";
+"3. Salir\n--> ";
 
 const string MENU_ENTIDAD_2 =
 "¿Qué quiere hacer con la entidad \"2: tipos de multas\"?\n"
@@ -117,6 +112,12 @@ const string MENU_ESPECIFICAS_1 =
 "3. Consultar cuál es la denuncia más común.\n"
 "4. Consultar el número de denuncias registradas por el código.\n"
 "5. Salir\n --> ";
+
+const string MENSAJE_ENTRADA_DATOS =
+"Para introducir los datos tenga en cuenta: \n"
+"- Para no especificar algun parámetro numérico, simplemente escriba -1\n"
+"- No escribas carácteres que no sean números ( -1 se incluye) excepto que se especifique lo contrario\n"
+"- No dejes valores vacios\n ";
 
 //Subprogramas de Mykola Stefansky: Menu y Entidad 2 (multas)
 bool Menu(v_denuncia&v1, v_multa&v2, v_imposicio&v3, t_zonas& z);
@@ -144,13 +145,13 @@ void ModificarInfoE3(v_imposicio& v3);
 bool MenuEntidad1(v_denuncia& v1, t_zonas& z, const v_multa& v2);
 void LecturaFicheroE1(v_denuncia& v1, t_zonas& z);
 void ModificarFicheroE1(const v_denuncia& v1, const t_zonas& z);
-void DescripcionDenuncia(const t_denuncia& t, const t_zonas& z);
+void DescripcionDenuncia(const t_denuncia& t, const t_zonas& z, const v_multa& v2);
 t_denuncia GenerarDenuncia(t_zonas& z,bool denunciaNueva, const v_multa& v1);
 vector<int> FiltrarDenuncias(const v_denuncia& v1, t_denuncia r); //  Filtra las denuncias que encajan con los valores de la denuncia r de referencia
-void AnadirInfoE1(v_denuncia& v1, t_zonas& z);
-void ConsultaInfoE1(const v_denuncia& v1, t_zonas& z, const v_multa& v2);
-void EliminarInfoE1(v_denuncia& v1, const t_zonas& z);
-void ModificarInfoE1(v_denuncia& v1, const t_zonas& z);
+void AnadirInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2);
+void ConsultaInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2);
+void EliminarInfoE1(v_denuncia& v1, const t_zonas& z, int indice);
+void ModificarInfoE1(v_denuncia& v1, t_zonas& z, int indice, const v_multa& v2);
 
 //Funcionalidades específicas (v0-0-7 Nico)
 
@@ -162,8 +163,7 @@ void DenunciaMasComun(const v_denuncia&v1, const v_multa&v2);
 void BuscadorDenunciasCantidad(const v_denuncia&v1, const v_multa&v2);
 
 int main(){
-    setlocale(LC_ALL,""); // Esta función no estrictamente necesaria pero sirve para mostrar todos los carácteres del alfabeto español en la salido cout
-
+    setlocale(LC_ALL, "Catalan_Spain.1252"); // Esta función no estrictamente necesaria pero sirve para mostrar todos los carácteres del alfabeto español en la salido cout
     cout << "Inicializando Gestor-Denuncias-Barcelona..." << endl << endl;
 
     cout << "Leyendo fichero " << FICHERO_DENUNCIAS_BARCELONA << endl;
@@ -656,20 +656,17 @@ bool MenuEntidad1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
     int opcion;
     cout << MENU_ENTIDAD_1;
     cin >> opcion;
-    bool retorno=false;
 
     switch(opcion) {
         case 1: ConsultaInfoE1(v1, z, v2); break;
-        case 2: AnadirInfoE1(v1, z); break;
-        case 3: EliminarInfoE1(v1, z); break;
-        case 4: ModificarInfoE1(v1, z); break;
-        case 5: break;
+        case 2: AnadirInfoE1(v1, z, v2); break;
+        case 3: break;
         default: cout << "Opción no válida" << endl; break;
     }
-    return opcion == 5;
+    return opcion == 3;
 }
 
-void ModificarFicheroE1(const v_denuncia& v1, t_zonas& z) {
+void ModificarFicheroE1(const v_denuncia& v1, const t_zonas& z) {
     string cabecera = "Data_Infraccio Hora_Infraccio Codi_Carrer Nom_Carrer Num_Carrer Codi_Districte Nom_Districte Codi_Barri Nom_Barri Seccio_Censal Longitud_WGS84 Latitud_WGS84 Infraccio_Codi SUBTIPUS_EXPEDIENT Grua MITJA_IMPOSICIO Tipus_Vehicle_Codi Import_Nominal_€";
     ofstream fout(FICHERO_DENUNCIAS_BARCELONA);
 
@@ -677,11 +674,15 @@ void ModificarFicheroE1(const v_denuncia& v1, t_zonas& z) {
     int s = v1.size();
     for (int i=0; i< s; i++) {
         t_denuncia t = v1[i];
-        string nom_carrer = "";
+        string nom_distrito, nom_barrio;
+        if (t.codi_districte > -1 and t.codi_districte < DISTRITOS_BCN) nom_distrito=z.vd[t.codi_districte];
+        else nom_distrito="Indefinido";
+        if (t.codi_barri > -1 and t.codi_barri < BARRIOS_BCN) nom_barrio=z.vb[t.codi_barri];
+        else nom_barrio="Indefinido";
 
         fout << t.any << '-' << t.mes << '-' << t.dia << ' ' << t.hora << (t.minuto/10) << (t.minuto%10) << "00"
         << ' ' << t.codi_carrer << ' ' << t.nom_carrer << ' ' << t.num_carrer << ' ' << t.codi_districte << ' '
-        << z.vd[t.codi_districte] << ' ' << t.codi_barri << ' ' << z.vb[t.codi_barri] << ' ' << t.seccio_censal << ' '
+        << nom_distrito << ' ' << t.codi_barri << ' ' << nom_barrio << ' ' << t.seccio_censal << ' '
         << t.longitud << ' ' << t.latitud << ' ' << t.infraccio_codi << ' ' << t.subtipus_exp << ' ';
         if (t.grua==1) fout << 'X';
         else if (t.grua==0) fout << '_';
@@ -690,7 +691,7 @@ void ModificarFicheroE1(const v_denuncia& v1, t_zonas& z) {
     }
 }
 
-void DescripcionDenuncia(const t_denuncia& t, const t_zonas& z) {
+void DescripcionDenuncia(const t_denuncia& t, const t_zonas& z, const v_multa& v2) {
     string nom_districte, nom_barri, grua;
     if (t.codi_districte==-1) nom_districte="Indefinido";
     else                      nom_districte=z.vd[t.codi_districte];
@@ -715,6 +716,13 @@ void DescripcionDenuncia(const t_denuncia& t, const t_zonas& z) {
     cout << endl;
     cout << "Ubicación: " << t.num_carrer << " " << t.nom_carrer << " ( Distrito: " << nom_districte << " Barrio: " << nom_barri << " Lat: " << t.latitud << " Lon:" << t.longitud << ", S.C: " << t.seccio_censal << " )" << endl;
     cout << "Grua: " << grua << " codigo_infraccion: " << t.infraccio_codi << " importe: " << t.import << " subtipo_expediente: " << t.subtipus_exp << " medio_imposicion: " << t.mitja_impos << " tipo_vehiculo: " << t.tipus_vehicle << endl;
+    bool existe_codigo_infraccion; int n_infraccion;
+    BusquedaVectores1(v2,n_infraccion, existe_codigo_infraccion, t.infraccio_codi);
+    if (existe_codigo_infraccion) {
+        t_multa m = v2[n_infraccion];
+        cout << "Infraccion: " << m.desccurtaES << endl;
+    }
+
 }
 
 t_denuncia GenerarDenuncia(t_zonas& z,bool denunciaNueva, const v_multa& v1) {
@@ -723,7 +731,7 @@ t_denuncia GenerarDenuncia(t_zonas& z,bool denunciaNueva, const v_multa& v1) {
     t_denuncia r;
     bool denuncia_valida=false;
     while (!denuncia_valida) {
-        cout << endl <<  "Para introducir los datos tenga en cuenta: \n- Para no especificar algun parámetro numérico, simplemente escriba -1\n- No escribas carácteres que no sean números ( -1 se incluye) excepto que se especifique lo contrario\n- No dejes valores vacios " << endl;
+        cout << endl <<  MENSAJE_ENTRADA_DATOS;
         cout << "Introduce el año, el mes, el dia, la hora y minuto, separados por espacios ( ej: 2024 11 3 13 -1) -->";
         cin >> r.any >> r.mes >> r.dia >> r.hora >> r.minuto;
 
@@ -757,6 +765,8 @@ t_denuncia GenerarDenuncia(t_zonas& z,bool denunciaNueva, const v_multa& v1) {
         else {
             // PENDIENTE HACER --> Definicion y validación de valores relacionados con la entidad 3: Mitja_imposicio y subtipus_expedient
             // PENDIENTE HACER --> Definicion y validacion de valores de TIPUS_VEHICLE_CODI
+            // Cuando el código llega aquí es que la denuncia generada es válida (pero falta confirmación por parte del usuario)
+            denuncia_valida=true;
 
             // Validación de código barrio
             if (r.codi_barri >= 0 and z.vb[r.codi_barri]=="" ) {
@@ -785,15 +795,14 @@ t_denuncia GenerarDenuncia(t_zonas& z,bool denunciaNueva, const v_multa& v1) {
                     r.nom_carrer = c.nombre;
                 }
             }
+
+            cout << "Se han introducido los siguientes datos: " << endl;
+            DescripcionDenuncia(r,z,v1);
+            string respuesta;
+            cout << "Son correctos? (1=Sí 0=No) -->"; cin >> respuesta;
+            if (respuesta=="1") denuncia_valida=true;
+            else                denuncia_valida=false;
         }
-
-        cout << "Se han introducido los siguientes datos: " << endl;
-        DescripcionDenuncia(r,z);
-        string respuesta;
-        cout << "Son correctos? (1=Sí 0=No) -->"; cin >> respuesta;
-        if (respuesta=="1") denuncia_valida=true;
-        else                denuncia_valida=false;
-
     }
     return r;
 }
@@ -809,32 +818,149 @@ vector<int> FiltrarDenuncias(const v_denuncia& v1, t_denuncia r) { // Devuelve u
             and (r.hora ==-1 or d.hora==r.hora) and (r.minuto == -1 or d.minuto==r.minuto)
             and (r.codi_barri==-1 or d.codi_barri==r.codi_barri) and (r.codi_districte==-1 or d.codi_districte==r.codi_districte)
             and (r.seccio_censal==-1 or d.seccio_censal==r.seccio_censal) and (r.codi_carrer==-1 or d.codi_carrer==r.codi_carrer)
-            and (r.num_carrer==-1 or d.num_carrer==r.num_carrer) and (r.grua==-1 or d.grua==r.grua)
+            and (r.num_carrer==-1 or d.num_carrer==r.num_carrer) and (r.grua==-1 or d.grua==r.grua) and (r.infraccio_codi==-1 or d.infraccio_codi==r.infraccio_codi)
             ) v1f.push_back(i);
     }
     return v1f;
 
 }
 
-void ConsultaInfoE1(const v_denuncia& v1, t_zonas& z, const v_multa& v2) {
-    cout << "A continuación debes introducir los datos sobre la denuncia/denuncias que deseas consultar: " << endl;
+void ConsultaInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
+    cout << "A continuación debes introducir los datos sobre la denuncia/denuncias que deseas consultar/modificar/eliminar: " << endl;
     t_denuncia r = GenerarDenuncia(z,false,v2);
-    vector<int> v1f = FiltrarDenuncias(v1,r);
+    vector<int> v1f = FiltrarDenuncias(v1,r); // Devuelve un vector con indices de v1
     cout << "Se han encontrado " << v1f.size() << " denuncias" << endl;
 
+    if (v1f.size() > 0) {
+        bool salir=false;
+        int i=0;
+        int opcion;
+        while (!salir) {
+            cout << endl << "Información sobre denuncia " << i+1 << "/" << v1f.size() << ": ";
+            DescripcionDenuncia(v1[v1f[i]], z, v2);
+            cout << "Que desea hacer? " << endl
+            << "1. Salir" << endl
+            << "2. Modificar esta denuncia" << endl
+            << "3. Eliminar esta denuncia" << endl;
+            if ( v1f.size() > 1) cout << "4. Pasar a la siguiente denuncia" << endl;
+            cout << "-->"; cin >> opcion;
+            if (opcion==1) salir=true;
+            else if (opcion==2) {
+                ModificarInfoE1(v1, z, v1f[i], v2 );
+                v1f =  FiltrarDenuncias(v1,r); // Actualizar vector de índices v1f
+            } else if (opcion==3) {
+                EliminarInfoE1(v1,z,v1f[i]);
+                v1f =  FiltrarDenuncias(v1,r); // Actualizar vector de índices v1f
+            } else if (opcion==4) {
+                i++;
+            }
+            if (v1f.size()==0) salir=true;
+            else if (i>=v1f.size()) i=0;
+        }
+
+    }
+
+
 }
 
-
-void AnadirInfoE1(v_denuncia& v1, t_zonas& z) {
-
+void AnadirInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
+    cout << "A continuación debes introducir los datos de la denuncia que desea generar: " << endl;
+    t_denuncia d = GenerarDenuncia(z, true, v2);
+    v1.push_back(d);
+    ModificarFicheroE1(v1,z);
+    cout << "Denuncia registrada." << endl;
 }
 
-void EliminarInfoE1(v_denuncia& v1, const t_zonas& z) {
-
+void EliminarInfoE1(v_denuncia& v1, const t_zonas& z, int indice) {
+    if (v1.size() >= 2 and indice < v1.size() and indice > 0){
+        int i=indice;
+        int f=v1.size()-2;
+        while (i<=f) {
+            v1[i] = v1[i+1];
+            i++;
+        }
+        v1.pop_back();
+    }
+    ModificarFicheroE1(v1,z);
 }
 
-void ModificarInfoE1(v_denuncia& v1, const t_zonas& z) {
-
+void ModificarInfoE1(v_denuncia& v1, t_zonas& z, int i, const v_multa& v2) {
+    cout << endl <<  MENSAJE_ENTRADA_DATOS;
+    bool salir=false;
+    int opcion;
+    while (!salir) {
+        t_denuncia d = v1[i];
+        cout << "Que desea modificar?" << endl
+        <<      "1. Fecha " << endl
+        <<      "2. Ubicación" << endl
+        <<      "3. Infracción" << endl
+        <<      "4. Otros valores" << endl
+        <<      "5. Finalizar" << endl
+        <<       "-->";
+        cin >> opcion;
+        bool entrada_valida=false;
+        if (opcion==1) {
+            while (!entrada_valida) {
+                cout << "Introduce año, mes, dia, hora y minuto ( Actual: " << d.any << " " << d.mes << " " << d.dia << " " << d.hora << " " << d.minuto << ") -->";
+                cin >> v1[i].any >> v1[i].mes >> v1[i].dia >> v1[i].hora >> v1[i].minuto;
+                if (v1[i].any < -1 or (v1[i].mes!= -1 and v1[i].mes < 1) or v1[i].mes > 12 or v1[i].dia > 31 or (v1[i].dia!=-1 and v1[i].dia<1)
+                    or v1[i].hora > 23 or v1[i].hora < -1 or v1[i].minuto > 59 or v1[i].minuto < -1) {
+                    cout << "Entrada invalida." << endl; entrada_valida=false;
+                } else entrada_valida=true;
+            }
+        } else if (opcion==2) {
+            while (!entrada_valida) {
+                cout << "Introduce el codigo de calle, numero de calle, codigo de distrito, codigo de barrio y sección censal (Actual: " << d.codi_carrer << " " << d.num_carrer << " " << d.codi_districte << " " << d.codi_barri << " " << d.seccio_censal << " ) -->";
+                cin >> v1[i].codi_carrer >> v1[i].num_carrer >> v1[i].codi_districte >> v1[i].codi_barri >> v1[i].seccio_censal;
+                entrada_valida=false;
+                if (v1[i].codi_barri >= BARRIOS_BCN) { cout << "Error: El codigo de barrio debe estar entre 0 y " << (BARRIOS_BCN-1) << endl; }
+                else if (v1[i].codi_districte >= DISTRITOS_BCN) {cout << "Error: El codigo de distrito debe estar entre 0 y " << (DISTRITOS_BCN-1) << endl; }
+                else { entrada_valida=true;
+                    // Validación de código de calle
+                    t_calle c; bool existe_calle;
+                    if (v1[i].codi_carrer < 0)  v1[i].nom_carrer = "Indefinida";
+                    else {
+                        c = BuscarCalle(z,v1[i].codi_carrer,existe_calle);
+                        if (existe_calle)   v1[i].nom_carrer = c.nombre;
+                        else {
+                            cout << "La calle con código " << v1[i].codi_carrer << " no está registrada, introduce su nombre (reemplaza los espacios por '_') -->";
+                            cin >> c.nombre;
+                            c.codigo = v1[i].codi_carrer;
+                            z.vc.push_back(c);
+                            v1[i].nom_carrer = c.nombre;
+                        }
+                    }
+                }
+            }
+            cout << "Introduce coordenadas, Longitud y Latitud (Actual: " << d.longitud << " " << d.latitud << " ) -->";
+            cin >> v1[i].longitud >> v1[i].latitud;
+        } else if (opcion==3) {
+            while (!entrada_valida) {
+                cout << "Introduce codigo sanción (Actual: " << d.infraccio_codi << " ) -->";
+                cin >> v1[i].infraccio_codi;
+                bool existe_codigo_infraccion; int n_infraccion;
+                BusquedaVectores1(v2,n_infraccion, existe_codigo_infraccion, v1[i].infraccio_codi);
+                if (!existe_codigo_infraccion) {
+                    cout << "El código de infracción introducido es inválido, por favor, registre primero el tipo de infracción" << endl;
+                    entrada_valida=false;
+                } else {v1[i].import = v2[n_infraccion].import; entrada_valida=true;}
+            }
+        } else if (opcion==4) {
+            while (!entrada_valida) {
+                cout << "Ha requerido grua? (1=Sí 0=No -1=No especifica) -->"; cin >> v1[i].grua;
+                if (v1[i].grua > 1 or v1[i].grua < -1) entrada_valida=false;
+                else                                   entrada_valida=true;
+            }
+        } else if (opcion==5) {
+            cout << "La denuncia modificada ha quedado así: " << endl;
+            DescripcionDenuncia(v1[i],z, v2);
+            cout << "Es correcto? (1=Sí 0=No)"; cin >> opcion;
+            if (opcion==1) salir=true;
+            else           salir=false;
+        }
+    }
+    ModificarFicheroE1(v1,z);
+    cout << "Denuncia modificada con éxito." << endl << endl;
 }
 
 //FUNCIONALIDADES ESPECÍFICAS
