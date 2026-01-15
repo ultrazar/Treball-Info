@@ -1,12 +1,8 @@
 // PROJECTE FINAL DE INFORMATICA ESEIAAT 2025-2026
 // Rafael Gras, Mykola Stefanskyy, Albert Sabadell
-// Versió 0.0.3 per Rafael Gras
+// Versió 0.0.4 per Albert Sabadell
 // Canvis:
-// --> Separar les constants fora del codi
-// --> Treure variables innecesaries (simplificar)
-// --> Comentar el codi
-// --> Separar el menu del main i estructurar-lo amb la forma swicth ()
-// --> Estructurar el codi i definir les accions generals i preparar per programar la entidad 1
+// --> Añadir subprogramas Entidad 3 i comenzar Entidad 4
 
 #include <iostream>
 #include <fstream>
@@ -20,9 +16,29 @@ struct t_multa{
     char tipus; //M (movimiento), E (estacionamiento)
 };
 
+struct t_imposicio {
+    string concepte;
+    string valor;
+    string valordesc_ca;
+    string valordesc_es;
+};
+
+struct t_comanda {
+    string entitat;
+    string accio;
+    string info;
+    string hora;
+};
+
+typedef vector<t_comanda> v_comandes;
+
+typedef vector<t_imposicio> v_imposicio;
+
 typedef vector<t_multa> v_multa;
 
 const string FICHERO_CODIGO_SANCIONES = "2024_denuncies_sancions_transit_codis.csv";
+const string FICHERO_SUBTIPUS_EXPEDIENT = "2024_denuncies_sancions_transit_conceptes_annex.csv"; // Entidad 3 y 4
+
 
 const string MENU_PRINCIPAL =
 "\nSelecciona que tipo de accion desea hacer:\n"
@@ -44,7 +60,7 @@ const string MENU_ENTIDAD_2 =
 "4. Modificar un tipo de multa.\n -->";
 
 //Subprogramas de Mykola Stefansky: Menu y Entidad 2 (multas)
-bool Menu(v_multa& v1);
+bool Menu(v_multa& v2, v_imposicio& v3);
 void LecturaFicheroE2(v_multa&v1);
 void ModificarFicheroE2(const v_multa&v1);
 void ConsultaInfoE2(const v_multa&v1);
@@ -53,6 +69,14 @@ void EliminarInfoE2(v_multa&v1);
 void ModificarInfoE2(v_multa&v1);
 
 //Subprogramas Albert Sabadell
+
+bool MenuEntidad3(v_imposicio& v3);
+void LecturaFicheroE3(v_imposicio& v3);
+void ModificarFicheroE3(const v_imposicio& v3);
+void ConsultaInfoE3(const v_imposicio& v3);
+void AnadirInfoE3(v_imposicio& v3);
+void EliminarInfoE3(v_imposicio& v3);
+void ModificarInfoE3(v_imposicio& v3);
 
 // Subprogramas Rafael Gras
 
@@ -66,10 +90,14 @@ int main(){
     v_multa v2;
     LecturaFicheroE2(v2);
 
-    while (!Menu(v2)); // El programa se acaba cuando Menu() devuelve true (el usuario ha solicitado salir del programa)
+    cout << "Leyendo fichero " << FICHERO_SUBTIPUS_EXPEDIENT << endl;
+    v_imposicio v3;
+    LecturaFicheroE3(v3);
+
+    while (!Menu(v2, v3)); // El programa se acaba cuando Menu() devuelve true (el usuario ha solicitado salir del programa)
 }
 
-bool Menu(v_multa& v2) { // Devuelve true cuando el programa debe finalizar
+bool Menu(v_multa& v2, v_imposicio& v3) { // Devuelve true cuando el programa debe finalizar
     int opcion, opcion2;
     cout << MENU_PRINCIPAL;
     cin >> opcion;
@@ -90,8 +118,9 @@ bool Menu(v_multa& v2) { // Devuelve true cuando el programa debe finalizar
                 }
             break; }
         case 3: {
-            cout << "Pendiente de hacer..." << endl;
-            break;}
+           while (!MenuEntidad3(v3)); // Menú específico de la Entidad 3
+           break;
+                  }
         case 4: {
             cout << "Pendiente de hacer..." << endl;
             break;}
@@ -147,6 +176,161 @@ void LecturaFicheroE2(v_multa&v1){
         v1.push_back(x); //Introducimos los datos de la lectura en el vector
     }
 }
+
+void LecturaFicheroE3(v_imposicio& v3) {
+
+    ifstream cinf(FICHERO_SUBTIPUS_EXPEDIENT);
+
+    string linea, palabra;
+    getline(cinf, linea);
+
+    while (getline(cinf, linea)) {
+        t_imposicio x;
+        size_t pos = 0;
+        int col = 0;
+
+        while ((pos = linea.find(',')) != string::npos) {
+            palabra = linea.substr(0, pos);
+            linea.erase(0, pos + 1);
+
+            // eliminar posibles comillas
+            if (!palabra.empty() && palabra[0] == '"') palabra = palabra.substr(1, palabra.size()-2);
+
+            if (col == 0) x.concepte = palabra;
+            else if (col == 1) x.valor = palabra;
+            else if (col == 2) x.valordesc_ca = palabra;
+            else if (col == 3) x.valordesc_es = palabra;
+
+            col++;
+        }
+
+        if (!linea.empty()) x.valordesc_es = linea;
+
+        v3.push_back(x);
+    }
+}
+
+void ModificarFicheroE3(const v_imposicio& v3){
+    ofstream fout(FICHERO_SUBTIPUS_EXPEDIENT);
+
+    // Usamos esto para la Cabecera
+    fout << "Concepte,Valor,Descripcio_CA,Descripcio_ES";
+
+    for (int i = 0; i < v3.size(); i++){
+        fout << endl;
+        fout << v3[i].concepte << "," << v3[i].valor << ","
+             << v3[i].valordesc_ca << "," << v3[i].valordesc_es;
+    }
+}
+
+void AnadirInfoE3(v_imposicio& v3){
+    t_imposicio nuevo;
+
+    cout << "Introduce el concepto: ";
+    cin.ignore();
+    getline(cin, nuevo.concepte);
+
+    cout << "Introduce el valor (código único): ";
+    cin >> nuevo.valor;
+    cin.ignore();
+
+    cout << "Introduce la descripción en catalán: ";
+    getline(cin, nuevo.valordesc_ca);
+
+    cout << "Introduce la descripción en español: ";
+    getline(cin, nuevo.valordesc_es);
+
+    v3.push_back(nuevo);
+    ModificarFicheroE3(v3);
+
+    cout << "Subtipo añadido correctamente." << endl << endl;
+}
+
+void EliminarInfoE3(v_imposicio& v3){
+    string codigo;
+    bool encontrado = false;
+
+    cout << "Introduce el valor (código) del subtipo a eliminar: ";
+    cin >> codigo;
+
+    for (int i = 0; i < v3.size() && !encontrado; i++){
+        if (v3[i].valor == codigo){
+            encontrado = true;
+            v3.erase(v3.begin() + i);
+            ModificarFicheroE3(v3);
+            cout << "Subtipo eliminado correctamente." << endl << endl;
+        }
+    }
+    if (!encontrado) cout << "No se encontró el subtipo." << endl << endl;
+}
+
+void ModificarInfoE3(v_imposicio& v3){
+    string codigo;
+    bool encontrado = false;
+
+    cout << "Introduce el valor (código) del subtipo a modificar: ";
+    cin >> codigo;
+    cin.ignore();
+
+    for (int i = 0; i < v3.size() && !encontrado; i++){
+        if (v3[i].valor == codigo){
+            encontrado = true;
+
+            cout << "Nuevo concepto (actual: " << v3[i].concepte << "): ";
+            getline(cin, v3[i].concepte);
+
+            cout << "Nueva descripción en catalán (actual: " << v3[i].valordesc_ca << "): ";
+            getline(cin, v3[i].valordesc_ca);
+
+            cout << "Nueva descripción en español (actual: " << v3[i].valordesc_es << "): ";
+            getline(cin, v3[i].valordesc_es);
+
+            ModificarFicheroE3(v3);
+            cout << "Subtipo modificado correctamente." << endl << endl;
+        }
+    }
+    if (!encontrado) cout << "No se encontró el subtipo." << endl << endl;
+}
+
+
+void ConsultaInfoE3(const v_imposicio& v3) {
+    string codigo;
+    bool trobat = false;
+
+    cout << "Introduce el código (Valor) a consultar: ";
+    cin >> codigo;
+
+    for (int i = 0; i < v3.size() && !trobat; i++) {
+        if (v3[i].valor == codigo) {
+            trobat = true;
+            cout << "Concepto: " << v3[i].concepte << endl;
+            cout << "Descripción (CA): " << v3[i].valordesc_ca << endl;
+            cout << "Descripción (ES): " << v3[i].valordesc_es << endl << endl;
+        }
+    }
+    if (!trobat) cout << "No se encontró información para el código " << codigo << endl << endl;
+}
+
+bool MenuEntidad3(v_imposicio& v3) {
+    int opcion;
+    cout << "\nMenu Entidad 3: Subtipos de expediente\n"
+         << "1. Consultar un subtipo\n"
+         << "2. Añadir un subtipo\n"
+         << "3. Eliminar un subtipo\n"
+         << "4. Modificar un subtipo\n"
+         << "5. Salir\n--> ";
+    cin >> opcion;
+
+    switch(opcion) {
+        case 1: ConsultaInfoE3(v3); break;
+        case 2: AnadirInfoE3(v3); break;
+        case 3: EliminarInfoE3(v3); break;
+        case 4: ModificarInfoE3(v3); break;
+        case 5: return true;
+        default: cout << "Opción no válida" << endl; break;
+        }
+        return opcion == 5;
+   }
 
 void ModificarFicheroE2(const v_multa&v1){
 
