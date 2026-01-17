@@ -114,7 +114,7 @@ const string MENU_ENTIDAD_2 =
 
 const string MENU_ESPECIFICAS_1 =
 "¿Qué quiere hacer?\n"
-"1. Consultar el mes y el día con más recaudación.\n"
+"1. Consultar el mes y el día con más recaudación/infracciones.\n"
 "2. Consultar el número de veces que se ha requerido el uso de una grúa.\n"
 "3. Consultar cuál es la denuncia más común.\n"
 "4. Consultar el número de denuncias registradas por el código.\n"
