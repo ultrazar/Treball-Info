@@ -153,7 +153,7 @@ void ModificarInfoE2(v_multa&v1);
 bool MenuEntidad3(v_imposicio& v3);
 void LecturaFicheroE3(v_imposicio& v3);
 void ModificarFicheroE3(const v_imposicio& v3);
-void ConsultaInfoE3(const v_imposicio& v3);
+void ConsultaInfoE3(const v_imposicio& v3, string codigo);
 void AnadirInfoE3(v_imposicio& v3);
 void EliminarInfoE3(v_imposicio& v3);
 void ModificarInfoE3(v_imposicio& v3);
@@ -664,12 +664,8 @@ void ModificarInfoE3(v_imposicio& v3){
         cout << "No se encontro el subtipo." << endl << endl;
 }
 
-void ConsultaInfoE3(const v_imposicio& v3) {
-    string codigo;
+void ConsultaInfoE3(const v_imposicio&v3, string codigo) {
     bool trobat = false;
-
-    cout << "Introduce el código (Valor) a consultar: ";
-    cin >> codigo;
 
     for (int i = 0; i < v3.size() && !trobat; i++) {
         if (v3[i].valor == codigo) {
@@ -685,6 +681,7 @@ void ConsultaInfoE3(const v_imposicio& v3) {
 
 bool MenuEntidad3(v_imposicio&v3) {
     int opcion;
+    string codigo;
     cout << "\nMenu Entidad 3: Subtipos de expediente\n"
          << "1. Consultar un subtipo\n"
          << "2. Añadir un subtipo\n"
@@ -694,7 +691,11 @@ bool MenuEntidad3(v_imposicio&v3) {
     cin >> opcion;
 
     switch(opcion) {
-        case 1: ConsultaInfoE3(v3); break;
+        case 1: {
+            cout << "Introduce el código (Valor)\n --> ";
+            cin >> codigo;
+            ConsultaInfoE3(v3, codigo);
+            break;}
         case 2: AnadirInfoE3(v3); break;
         case 3: EliminarInfoE3(v3); break;
         case 4: ModificarInfoE3(v3); break;
@@ -1326,6 +1327,12 @@ void MedioImposicionMasComun (const v_denuncia&v1, const v_imposicio&v3){
 
     cout << "La denuncia más común tiene como medio de imposicion " << impmascomun_desc << " (" << impmascomun << ") y ha tenido " << mascomun << " incidencias, ";
     cout << "hecho que representa el " << (float(mascomun)/v1.size())*100 << "% de las denuncias." << endl;
+    while (!valido){
+        cin >> consulta;
+        if (consulta == "S"){ConsultaInfoE3(v3, impmascomun); valido = true;}
+        else if (consulta == "N") {cout << "Volviendo al menú... " << endl << endl; valido = true;}
+        else cout << "Introduce una opción válida \n --> " << endl;
+    }
 
 }
 
