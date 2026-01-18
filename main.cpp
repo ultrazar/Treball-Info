@@ -1508,7 +1508,7 @@ string String(int n) {
     string r="";
     bool negativo=n<0;
     if (negativo) n*=-1;
-    if (n==0) r=="0";
+    if (n==0) r="0";
     else{
         while (n>0) {
             int i=n%10;
