@@ -1,6 +1,6 @@
 // PROJECTE FINAL DE INFORMATICA ESEIAAT 2025-2026
 // Rafael Gras, Mykola Stefanskyy, Albert Sabadell
-// Versi√≥ 1.0.0 per Rafael Gras
+// VersiÛ 1.0.0 per Rafael Gras
 
 #include <iostream>
 #include <fstream>
@@ -13,7 +13,7 @@ struct t_denuncia{ // tupla de entidad 1
     string subtipus_exp, mitja_impos, tipus_vehicle, nom_carrer;
     int codi_carrer, num_carrer, codi_districte, codi_barri, seccio_censal, import, infraccio_codi;
     double longitud, latitud;
-    int grua; // No puede ser bool porque el valor -1 en cualquier par√°metro significa "no especificado"
+    int grua; // No puede ser bool porque el valor -1 en cualquier par·metro significa "no especificado"
 };
 
 struct t_multa{ // tupla de entidad 2
@@ -36,12 +36,12 @@ struct t_log {  // tupla de entidad 4 (registro de acciones)
     string detall;
 };
 
-struct t_dencodigo{ // ( tupla para poder mostrar en pantalla la infraccion m√°s recurrente )
+struct t_dencodigo{ // ( tupla para poder mostrar en pantalla la infraccion m·s recurrente )
     int codi;
     int num;
     };
 
-struct t_denimp{ // ( tupla para poder mostrar en pantalla el medio de imposici√≥n m√°s recurrente )
+struct t_denimp{ // ( tupla para poder mostrar en pantalla el medio de imposiciÛn m·s recurrente )
     string imp;
     int num;
 };
@@ -77,7 +77,7 @@ struct t_zonas { // Tupla que agrupa vectores de distritos, barrios, y calles, p
 
 };
 
-//Par√°metros:
+//Par·metros:
 const string FICHERO_DENUNCIAS_BARCELONA = "2024_4t_denuncies_sancions_transit_detall.txt";
 const string FICHERO_CODIGO_SANCIONES = "2024_denuncies_sancions_transit_codis.txt";
 const string FICHERO_SUBTIPUS_EXPEDIENT = "2024_denuncies_sancions_transit_conceptes_annex.txt";
@@ -90,50 +90,50 @@ const int DISTRITOS_BCN = 11; // ''
 // Constantes (Textos menus)
 const string MENU_PRINCIPAL =
 "\nSelecciona el tipo de accion desea hacer:\n"
-"1. Acciones b√°sicas sobre la entidad \"1: infracciones/denuncias Barcelona\" \n"   // Entidad 1 --> Rafael Gras
-"2. Acciones b√°sicas sobre la entidad \"2: tipos de multas\" \n"                    // Entidad 2 --> Mykola Stefanskyy
-"3. Acciones b√°sicas sobre la entidad \"3: medio imposici√≥n\" \n"                   // Entidad 3 --> Albert Sabadell
-"4. A. Espec√≠ficas: Diagn√≥stico de denuncias en Barcelona \n"                       // Acci√≥n espec√≠fica 1
-"5. A. Espec√≠ficas: Diagn√≥stico de denuncias en una zona espec√≠fica \n"             // Acci√≥n espec√≠fica 2
-"6. A. Espec√≠ficas: Validaci√≥n de datos \n"                                         // Acci√≥n espec√≠fica 3
+"1. Acciones b·sicas sobre la entidad \"1: infracciones/denuncias Barcelona\" \n"   // Entidad 1 --> Rafael Gras
+"2. Acciones b·sicas sobre la entidad \"2: tipos de multas\" \n"                    // Entidad 2 --> Mykola Stefanskyy
+"3. Acciones b·sicas sobre la entidad \"3: medio imposiciÛn\" \n"                   // Entidad 3 --> Albert Sabadell
+"4. A. EspecÌficas: DiagnÛstico de denuncias en Barcelona \n"                       // AcciÛn especÌfica 1
+"5. A. EspecÌficas: DiagnÛstico de denuncias en una zona especÌfica \n"             // AcciÛn especÌfica 2
+"6. A. EspecÌficas: ValidaciÛn de datos \n"                                         // AcciÛn especÌfica 3
 "7. Salir del programa \n --> ";
 
 const string MENU_ENTIDAD_1 =
-"\nMenu Entidad 1: Denuncias de tr√°fico en Barcelona\n"
+"\nMenu Entidad 1: Denuncias de tr·fico en Barcelona\n"
 "1. Consultar, modificar i/o eliminar denuncias\n"
-"2. A√±adir una denuncia\n"
+"2. AÒadir una denuncia\n"
 "3. Salir\n--> ";
 
 const string MENU_ENTIDAD_2 =
-"¬øQu√© quiere hacer con la entidad \"2: tipos de multas\"?\n"
-"1. Consultar la informaci√≥n sobre un tipo de multa.\n"
-"2. A√±adir un nuevo tipo de multa al sistema.\n"
+"øQuÈ quiere hacer con la entidad \"2: tipos de multas\"?\n"
+"1. Consultar la informaciÛn sobre un tipo de multa.\n"
+"2. AÒadir un nuevo tipo de multa al sistema.\n"
 "3. Eliminar un tipo de multa del sistema.\n"
 "4. Modificar un tipo de multa.\n"
 "5. Salir\n --> ";
 
 const string MENU_ESPECIFICAS_1 =
-"¬øQu√© quiere hacer?\n"
-"1. Consultar el mes y el d√≠a con m√°s recaudaci√≥n/infracciones.\n"
-"2. Consultar el n√∫mero de veces que se ha requerido el uso de una gr√∫a.\n"
-"3. Consultar cu√°l es la denuncia m√°s com√∫n.\n"
-"4. Consultar el n√∫mero de denuncias registradas por el c√≥digo.\n"
-"5. Consultar cu√°l es el medio de imposici√≥n m√°s com√∫n.\n"
-"6. Consultar el n√∫mero de denuncias registradas por el medio de imposici√≥n.\n"
+"øQuÈ quiere hacer?\n"
+"1. Consultar el mes y el dÌa con m·s recaudaciÛn/infracciones.\n"
+"2. Consultar el n˙mero de veces que se ha requerido el uso de una gr˙a.\n"
+"3. Consultar cu·l es la denuncia m·s com˙n.\n"
+"4. Consultar el n˙mero de denuncias registradas por el cÛdigo.\n"
+"5. Consultar cu·l es el medio de imposiciÛn m·s com˙n.\n"
+"6. Consultar el n˙mero de denuncias registradas por el medio de imposiciÛn.\n"
 "7. Salir\n --> ";
 
 const string MENU_ESPECIFICAS_2 =
-"¬øQu√© quiere hacer?\n"
-"1. Consultar c√≥digos de distritos\n"
-"2. Consultar c√≥digos de barrios\n"
-"3. Consultar c√≥digos de calles\n"
-"4. Accion espec√≠fica filtrada por zona/tiempo/tipo\n"
+"øQuÈ quiere hacer?\n"
+"1. Consultar cÛdigos de distritos\n"
+"2. Consultar cÛdigos de barrios\n"
+"3. Consultar cÛdigos de calles\n"
+"4. Accion especÌfica filtrada por zona/tiempo/tipo\n"
 "5. Salir\n-->";
 
 const string MENSAJE_ENTRADA_DATOS =
 "Para introducir los datos tenga en cuenta: \n"
-"- Para no especificar algun par√°metro num√©rico, simplemente escriba -1\n"
-"- No escribas car√°cteres que no sean n√∫meros ( -1 se incluye) excepto que se especifique lo contrario\n"
+"- Para no especificar algun par·metro numÈrico, simplemente escriba -1\n"
+"- No escribas car·cteres que no sean n˙meros ( -1 se incluye) excepto que se especifique lo contrario\n"
 "- No dejes valores vacios\n ";
 
 //Subprogramas de Mykola Stefanskyy: Menu y Entidad 2 (multas)
@@ -175,7 +175,7 @@ void EliminarInfoE1(v_denuncia& v1, const t_zonas& z, int indice);
 void ModificarInfoE1(v_denuncia& v1, t_zonas& z, int indice, const v_multa& v2);
 bool MenuEspecificas2(v_denuncia&v1, v_multa&v2, v_imposicio&v3, t_zonas& z);
 
-//Funcionalidades espec√≠ficas (v0-0-7 Nico)
+//Funcionalidades especÌficas (v0-0-7 Nico)
 
 bool MenuEspecificas1(v_denuncia&v1, v_multa&v2, v_imposicio&v3);
 void MesDiaRecaudacionInfraccion(const v_denuncia&v1);
@@ -191,11 +191,11 @@ void ValidacionDatos(const v_denuncia&v1, const v_multa&v2, const v_imposicio&v3
 // Otros
 string String(int n);
 
-int contadorLogs = 1; // contador global de logs, se tiene que mantener fuera del main para no tener que arrastrarlo en todos los subprogramas y as√≠ poder realizar un registro en cualquier momento
+int contadorLogs = 1; // contador global de logs, se tiene que mantener fuera del main para no tener que arrastrarlo en todos los subprogramas y asÌ poder realizar un registro en cualquier momento
 v_log logs;
 
 int main(){
-    setlocale(LC_ALL, "Catalan_Spain.1252"); // Esta funci√≥n no estrictamente necesaria pero sirve para mostrar todos los car√°cteres del alfabeto espa√±ol en la salida cout
+    setlocale(LC_ALL, "Catalan_Spain.1252"); // Esta funciÛn no estrictamente necesaria pero sirve para mostrar todos los car·cteres del alfabeto espaÒol en la salida cout
     cout << "Inicializando Gestor-Denuncias-Barcelona..." << endl << endl;
 
     LecturaLogs(logs);
@@ -210,18 +210,18 @@ int main(){
 
     LecturaFicheroE1(v1, z);
 
-    cout << "Se han cargado "  << v1.size() << " denuncias de tr√°fico." << endl;
+    cout << "Se han cargado "  << v1.size() << " denuncias de tr·fico." << endl;
     cout << "Se han encontrado " << z.vc.size() << " calles distintas." << endl << endl;
 
     cout << "Leyendo fichero " << FICHERO_CODIGO_SANCIONES << endl << endl;
     v_multa v2;
     LecturaFicheroE2(v2);
-    cout << "Se han le√≠do " << v2.size() << " tipos de infracciones." << endl << endl;
+    cout << "Se han leÌdo " << v2.size() << " tipos de infracciones." << endl << endl;
 
     cout << "Leyendo fichero " << FICHERO_SUBTIPUS_EXPEDIENT << endl;
     v_imposicio v3;
     LecturaFicheroE3(v3);
-    cout << "Se han le√≠do " << v3.size() << " subtipos de expediente." << endl << endl;
+    cout << "Se han leÌdo " << v3.size() << " subtipos de expediente." << endl << endl;
 
     while (!Menu(v1, v2, v3, z)); // El programa se acaba cuando Menu() devuelve true (el usuario ha solicitado salir del programa)
 
@@ -248,10 +248,10 @@ bool Menu(v_denuncia&v1, v_multa&v2, v_imposicio&v3, t_zonas& z) { // Devuelve t
             while(!MenuEntidad2(v2));
             break;}
         case 3: {
-           while (!MenuEntidad3(v3)); // Men√∫ espec√≠fico de la Entidad 3
+           while (!MenuEntidad3(v3)); // Men˙ especÌfico de la Entidad 3
            break;}
         case 4: {
-            while (!MenuEspecificas1(v1, v2, v3)); // Men√∫ de las espec√≠ficas 1
+            while (!MenuEspecificas1(v1, v2, v3)); // Men˙ de las especÌficas 1
             break;}
         case 5: {
             while (!MenuEspecificas2(v1, v2, v3, z) );
@@ -260,22 +260,22 @@ bool Menu(v_denuncia&v1, v_multa&v2, v_imposicio&v3, t_zonas& z) { // Devuelve t
             ValidacionDatos(v1, v2, v3, z);
             break;}
         case 7: {
-            cout << "¬°Hasta pronto!" << endl;
+            cout << "°Hasta pronto!" << endl;
             break;}
-        default: {cout << "Introduce una opci√≥n v√°lida" << endl; break; }
+        default: {cout << "Introduce una opciÛn v·lida" << endl; break; }
     }
     return opcion == 7;
 }
 
 //SUBPROGRAMAS MYKOLA STEFANSKYY (Entidad 2)
 
-bool MenuEntidad2(v_multa&v2) { //Men√∫ de la entidad 2
+bool MenuEntidad2(v_multa&v2) { //Men˙ de la entidad 2
     int opcion, codigo;
     cout << MENU_ENTIDAD_2;
     cin >> opcion;
     switch(opcion) {
         case 1:{
-            cout << "Introduce el c√≥digo de la infracci√≥n a consultar:\n --> ";
+            cout << "Introduce el cÛdigo de la infracciÛn a consultar:\n --> ";
             cin >> codigo;
             ConsultaInfoE2(v2, codigo);
             RegistrarLog(logs, "Multas", "Consulta-infraccion",String(codigo));
@@ -284,7 +284,7 @@ bool MenuEntidad2(v_multa&v2) { //Men√∫ de la entidad 2
         case 3: EliminarInfoE2(v2); break;
         case 4: ModificarInfoE2(v2); break;
         case 5: break;
-        default: cout << "Opci√≥n no v√°lida" << endl; break;
+        default: cout << "OpciÛn no v·lida" << endl; break;
         }
         return opcion == 5;
    }
@@ -296,7 +296,7 @@ void SalidaSinBarrasBajas(string palabra){ //Subprograma que permite la salida a
     }
 }
 
-void BusquedaVectores1(const v_multa&v1, int&n, bool&trobat, int codigo){ //Subprograma que realiza una b√∫squeda en el vector v_multa (est√° para evitar escribir varias veces lo mismo)
+void BusquedaVectores1(const v_multa&v1, int&n, bool&trobat, int codigo){ //Subprograma que realiza una b˙squeda en el vector v_multa (est· para evitar escribir varias veces lo mismo)
     for (int i = 0; i < v1.size() && !trobat; i++){
             if (v1[i].codi == codigo) {
                     trobat = true;
@@ -331,17 +331,17 @@ void ModificarFicheroE2(const v_multa&v1){ //Subprograma que permite modificar l
     }
 }
 
-void ConsultaInfoE2(const v_multa&v1, int codigo){ //Subprograma que permite consultar informaci√≥n sobre una denuncia
+void ConsultaInfoE2(const v_multa&v1, int codigo){ //Subprograma que permite consultar informaciÛn sobre una denuncia
         int leng = 1, n = 0;
         bool trobat = false;
         char opcionlenguaje;
 
         BusquedaVectores1(v1, n, trobat, codigo);
-        if (!trobat) cout << "No se ha encontrado informaci√≥n." << endl << endl;
+        if (!trobat) cout << "No se ha encontrado informaciÛn." << endl << endl;
         else {
 
             while (leng != 0){
-                cout << "¬øC√≥mo quiere ver las descripciones de la infracci√≥n? (En catal√°n (0) o en espa√±ol (1))\n --> ";
+                cout << "øCÛmo quiere ver las descripciones de la infracciÛn? (En catal·n (0) o en espaÒol (1))\n --> ";
                 cin >> opcionlenguaje;
                 if (opcionlenguaje == '0'){
                     cout << "DescCurtaCA: "; SalidaSinBarrasBajas(v1[n].desccurtaCA); cout << endl;
@@ -353,7 +353,7 @@ void ConsultaInfoE2(const v_multa&v1, int codigo){ //Subprograma que permite con
                     cout << "DescLlargaES: "; SalidaSinBarrasBajas(v1[n].descllargaES); cout << endl;
                     leng = 0;
                 }
-                else cout << "Introduce una opci√≥n v√°lida.";
+                else cout << "Introduce una opciÛn v·lida.";
             }
 
             cout << "Normativa: " << v1[n].norm << endl;
@@ -363,7 +363,7 @@ void ConsultaInfoE2(const v_multa&v1, int codigo){ //Subprograma que permite con
             cout << "Puntos a retirar: " << v1[n].punts_retirar << endl << endl;}
 }
 
-void AnadirInfoE2(v_multa&v1){ //Subprograma que permite a√±adir informaci√≥n a la base de datos relacionada con la entidad 2
+void AnadirInfoE2(v_multa&v1){ //Subprograma que permite aÒadir informaciÛn a la base de datos relacionada con la entidad 2
 
         t_multa nuevo;
         bool valido = false, codigo_repetido = false;
@@ -371,15 +371,15 @@ void AnadirInfoE2(v_multa&v1){ //Subprograma que permite a√±adir informaci√≥n a 
         while(!valido){
             codigo_repetido = false;
             cout << "Todas las oraciones se deben de introducir con los espacios sustituidos por '_'." << endl;
-            cout << "Introduce el nuevo c√≥digo de la infracci√≥n: \n --> ";
+            cout << "Introduce el nuevo cÛdigo de la infracciÛn: \n --> ";
             cin >> nuevo.codi;
-            cout << "Introduce la descripci√≥n corta en catal√°n: \n --> ";
+            cout << "Introduce la descripciÛn corta en catal·n: \n --> ";
             cin >> nuevo.desccurtaCA;
-            cout << "Introduce la descripci√≥n corta en castellano: \n --> ";
+            cout << "Introduce la descripciÛn corta en castellano: \n --> ";
             cin >> nuevo.desccurtaES;
-            cout << "Introduce la descripci√≥n larga en catal√°n: \n --> ";
+            cout << "Introduce la descripciÛn larga en catal·n: \n --> ";
             cin >> nuevo.descllargaCA;
-            cout << "Introduce la descripci√≥n larga en castellano: \n --> ";
+            cout << "Introduce la descripciÛn larga en castellano: \n --> ";
             cin >> nuevo.descllargaES;
             cout << "Introduce la normativa y el importe nominal: \n --> ";
             cin >> nuevo.norm >> nuevo.import;
@@ -392,7 +392,7 @@ void AnadirInfoE2(v_multa&v1){ //Subprograma que permite a√±adir informaci√≥n a 
                 }
             }
             if (codigo_repetido) {
-                cout << "Ya existe una infracci√≥n registrada con el c√≥digo " << nuevo.codi << "." << endl;
+                cout << "Ya existe una infracciÛn registrada con el cÛdigo " << nuevo.codi << "." << endl;
             }
             else if (nuevo.import < 0) {
                 cout << "El importe no puede ser negativo." << endl;
@@ -411,7 +411,7 @@ void AnadirInfoE2(v_multa&v1){ //Subprograma que permite a√±adir informaci√≥n a 
                 v1.push_back(nuevo);
                 RegistrarLog(logs, "Multa", "Alta", String(nuevo.codi));
                 ModificarFicheroE2(v1);
-                cout << endl << "Infracci√≥n a√±adida correctamente." << endl << endl;
+                cout << endl << "InfracciÛn aÒadida correctamente." << endl << endl;
             }
         }
 }
@@ -420,7 +420,7 @@ void EliminarInfoE2(v_multa&v1){
 
     bool trobat = false;
     int codigo;
-    cout << "Introduce el c√≥digo de la multa a eliminar: \n --> ";
+    cout << "Introduce el cÛdigo de la multa a eliminar: \n --> ";
     cin >> codigo;
 
     for (int i = 0; i < v1.size() && !trobat; i++){
@@ -429,16 +429,16 @@ void EliminarInfoE2(v_multa&v1){
             for (int k = i; k < v1.size()-1; k++){ //Eliminar y reorganizar el vector
                 v1[k] = v1[k+1];
             }
-            v1.pop_back(); //Eliminamos el √∫ltimo que queda repetido
+            v1.pop_back(); //Eliminamos el ˙ltimo que queda repetido
         }
     }
     if (trobat){
         ModificarFicheroE2(v1);
         RegistrarLog(logs, "Multa", "Eliminada", String(codigo));
-        cout << endl << "Infracci√≥n eliminada correctamente" << endl << endl;
+        cout << endl << "InfracciÛn eliminada correctamente" << endl << endl;
     }
 
-    else cout << endl << "No se ha podido encontrar la infracci√≥n a eliminar" << endl << endl;
+    else cout << endl << "No se ha podido encontrar la infracciÛn a eliminar" << endl << endl;
 }
 
 void ModificarInfoE2(v_multa&v1){
@@ -449,7 +449,7 @@ void ModificarInfoE2(v_multa&v1){
     bool k;
     string opcionlong;
 
-    cout << "Introduce el c√≥digo de la multa a modificar:\n --> ";
+    cout << "Introduce el cÛdigo de la multa a modificar:\n --> ";
     cin >> codigo;
     BusquedaVectores1(v1, n, trobat, codigo);
 
@@ -458,13 +458,13 @@ void ModificarInfoE2(v_multa&v1){
                     k = true;
                     valido = false;
 
-                    cout << "¬øQu√© deseas modificar? (Introduce el entero)" << endl
-                    << "1. C√≥digo de la infracci√≥n " << endl
-                    << "2. Descripci√≥n (CAT) " << endl
-                    << "3. Descripci√≥n (ESP) " << endl
+                    cout << "øQuÈ deseas modificar? (Introduce el entero)" << endl
+                    << "1. CÛdigo de la infracciÛn " << endl
+                    << "2. DescripciÛn (CAT) " << endl
+                    << "3. DescripciÛn (ESP) " << endl
                     << "4. Normativa " << endl
                     << "5. Importe nominal " << endl
-                    << "6. Tipo de la infracci√≥n " << endl
+                    << "6. Tipo de la infracciÛn " << endl
                     << "7. Puntos a retirar " << endl
                     << "8. Salir \n --> ";
 
@@ -472,16 +472,16 @@ void ModificarInfoE2(v_multa&v1){
                     if (opcionmod == 1){
                         while (!valido){
                             existe = false;
-                            cout << "Introduce el nuevo c√≥digo: \n --> ";
+                            cout << "Introduce el nuevo cÛdigo: \n --> ";
                             cin >> mod.codi;
                             for (int i = 0; i < v1.size() && !existe; i++)
                                 if (v1[i].codi == mod.codi) existe = true;
                             if (!existe){v1[n].codi = mod.codi; valido = true;}
-                            else cout << "Introduce un c√≥digo que no se encuentre ya en la base de datos." << endl;
+                            else cout << "Introduce un cÛdigo que no se encuentre ya en la base de datos." << endl;
                         }
                     }
                     else if (opcionmod == 2){
-                        cout << "¬øCorta o Larga? \n --> ";
+                        cout << "øCorta o Larga? \n --> ";
                         cin >> opcionlong;
                         while (k){
                             if (opcionlong == "Corta"){
@@ -496,11 +496,11 @@ void ModificarInfoE2(v_multa&v1){
                                 v1[n].descllargaCA = mod.descllargaCA;
                                 k = false;
                                 }
-                            else {cout << "Introduce una opci√≥n v√°lida" << endl; cin >> opcionlong;}
+                            else {cout << "Introduce una opciÛn v·lida" << endl; cin >> opcionlong;}
                         }
                     }
                     else if (opcionmod == 3){
-                        cout << "¬øCorta o Larga? \n --> ";
+                        cout << "øCorta o Larga? \n --> ";
                         cin >> opcionlong;
                         while (k){
                             if (opcionlong == "Corta"){
@@ -515,7 +515,7 @@ void ModificarInfoE2(v_multa&v1){
                                 v1[n].descllargaES = mod.descllargaES;
                                 k = false;
                             }
-                            else {cout << "Introduce una opci√≥n v√°lida" << endl; cin >> opcionlong; }
+                            else {cout << "Introduce una opciÛn v·lida" << endl; cin >> opcionlong; }
                         }
                     }
                     else if (opcionmod == 4){
@@ -531,7 +531,7 @@ void ModificarInfoE2(v_multa&v1){
                                 valido = true;
                                 v1[n].import = mod.import;
                             }
-                            else cout << "Introduce una cantidad v√°lida." << endl;
+                            else cout << "Introduce una cantidad v·lida." << endl;
                         }
                     }
                     else if (opcionmod == 6){
@@ -542,7 +542,7 @@ void ModificarInfoE2(v_multa&v1){
                                 v1[n].tipus = mod.tipus;
                                 valido = true;
                             }
-                            else cout << "Introduce un tipo v√°lido." << endl;
+                            else cout << "Introduce un tipo v·lido." << endl;
                         }
                     }
                     else if (opcionmod == 7){
@@ -553,7 +553,7 @@ void ModificarInfoE2(v_multa&v1){
                                 v1[n].punts_retirar = mod.punts_retirar;
                                 valido = true;
                             }
-                            else cout << "Introduce una cantidad v√°lida." << endl;
+                            else cout << "Introduce una cantidad v·lida." << endl;
                         }
                     }
                     else if (opcionmod == 8) {
@@ -561,10 +561,10 @@ void ModificarInfoE2(v_multa&v1){
                         RegistrarLog(logs, "Multa", "Modificada", String(codigo));
                         ModificarFicheroE2(v1);
                     }
-                    else cout << "Introduce una entrada v√°lida." << endl;}
+                    else cout << "Introduce una entrada v·lida." << endl;}
                 }
 
-            else cout << endl << "No se ha podido encontrar la infracci√≥n a modificar" << endl << endl;
+            else cout << endl << "No se ha podido encontrar la infracciÛn a modificar" << endl << endl;
 }
 
 // Subprogramas de Albert Sabadell
@@ -613,16 +613,16 @@ void AnadirInfoE3(v_imposicio& v3){
 
     v3.push_back(nuevo);
     ModificarFicheroE3(v3);
-    RegistrarLog(logs, "Medio_imposicion", "A√±adido", nuevo.concepte);
+    RegistrarLog(logs, "Medio_imposicion", "AÒadido", nuevo.concepte);
 
-    cout << "Subtipo a√±adido correctamente." << endl << endl;
+    cout << "Subtipo aÒadido correctamente." << endl << endl;
 }
 
 void EliminarInfoE3(v_imposicio& v3){
     string codigo;
     bool encontrado = false;
 
-    cout << "Introduce el valor (c√≥digo) del subtipo a eliminar: ";
+    cout << "Introduce el valor (cÛdigo) del subtipo a eliminar: ";
     cin >> codigo;
 
     for (int i = 0; i < v3.size() && !encontrado; i++){
@@ -634,7 +634,7 @@ void EliminarInfoE3(v_imposicio& v3){
             cout << "Subtipo eliminado correctamente." << endl << endl;
         }
     }
-    if (!encontrado) cout << "No se encontr√≥ el subtipo." << endl << endl;
+    if (!encontrado) cout << "No se encontrÛ el subtipo." << endl << endl;
 }
 
 void ModificarInfoE3(v_imposicio& v3){
@@ -671,12 +671,12 @@ void ConsultaInfoE3(const v_imposicio&v3, string codigo) {
         if (v3[i].valor == codigo) {
             trobat = true;
             cout << "Concepto: " << v3[i].concepte << endl;
-            cout << "Descripci√≥n (CA): " << v3[i].valordesc_ca << endl;
-            cout << "Descripci√≥n (ES): " << v3[i].valordesc_es << endl << endl;
+            cout << "DescripciÛn (CA): " << v3[i].valordesc_ca << endl;
+            cout << "DescripciÛn (ES): " << v3[i].valordesc_es << endl << endl;
             RegistrarLog(logs, "Medio-imposicion", "Consultado", codigo);
         }
     }
-    if (!trobat) cout << "No se encontr√≥ informaci√≥n para el c√≥digo " << codigo << endl << endl;
+    if (!trobat) cout << "No se encontrÛ informaciÛn para el cÛdigo " << codigo << endl << endl;
 }
 
 bool MenuEntidad3(v_imposicio&v3) {
@@ -684,7 +684,7 @@ bool MenuEntidad3(v_imposicio&v3) {
     string codigo;
     cout << "\nMenu Entidad 3: Subtipos de expediente\n"
          << "1. Consultar un subtipo\n"
-         << "2. A√±adir un subtipo\n"
+         << "2. AÒadir un subtipo\n"
          << "3. Eliminar un subtipo\n"
          << "4. Modificar un subtipo\n"
          << "5. Salir\n--> ";
@@ -692,7 +692,7 @@ bool MenuEntidad3(v_imposicio&v3) {
 
     switch(opcion) {
         case 1: {
-            cout << "Introduce el c√≥digo (Valor)\n --> ";
+            cout << "Introduce el cÛdigo (Valor)\n --> ";
             cin >> codigo;
             ConsultaInfoE3(v3, codigo);
             break;}
@@ -700,7 +700,7 @@ bool MenuEntidad3(v_imposicio&v3) {
         case 3: EliminarInfoE3(v3); break;
         case 4: ModificarInfoE3(v3); break;
         case 5: return true;
-        default: cout << "Opci√≥n no v√°lida" << endl; break;
+        default: cout << "OpciÛn no v·lida" << endl; break;
         }
         return opcion == 5;
    }
@@ -781,17 +781,17 @@ void LecturaFicheroE1(v_denuncia& v1, t_zonas& z) {
             c.nombre = t.nom_carrer;
             z.vc.push_back(c);
         }
-        if (t.codi_districte > 10 or t.codi_districte < 0) // Validaci√≥n de datos
+        if (t.codi_districte > 10 or t.codi_districte < 0) // ValidaciÛn de datos
             {cout << "ERROR1" << endl; continuar=false;}
         else if (z.vd[t.codi_districte]=="") {z.vd[t.codi_districte]=nombre_distrito; };
 
-        if (t.codi_barri > 73 or t.codi_barri < 0)  // Validaci√≥n de datos
+        if (t.codi_barri > 73 or t.codi_barri < 0)  // ValidaciÛn de datos
         { cout << "ERROR2" << endl; continuar=false;}
         else if (z.vb[t.codi_barri]=="") {z.vb[t.codi_barri]=nombre_barrio; };
 
         v1.push_back(t);
 
-        if ((k%50000)==0) {if (LIMITAR_LECTURA) continuar=false; else cout << "Se han le√≠do " << k << " denuncias" << endl;}
+        if ((k%50000)==0) {if (LIMITAR_LECTURA) continuar=false; else cout << "Se han leÌdo " << k << " denuncias" << endl;}
         k++;
     }
 }
@@ -805,13 +805,13 @@ bool MenuEntidad1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
         case 1: ConsultaInfoE1(v1, z, v2); break;
         case 2: AnadirInfoE1(v1, z, v2); break;
         case 3: break;
-        default: cout << "Opci√≥n no v√°lida" << endl; break;
+        default: cout << "OpciÛn no v·lida" << endl; break;
     }
     return opcion == 3;
 }
 
 void ModificarFicheroE1(const v_denuncia& v1, const t_zonas& z) {
-    string cabecera = "Data_Infraccio Hora_Infraccio Codi_Carrer Nom_Carrer Num_Carrer Codi_Districte Nom_Districte Codi_Barri Nom_Barri Seccio_Censal Longitud_WGS84 Latitud_WGS84 Infraccio_Codi SUBTIPUS_EXPEDIENT Grua MITJA_IMPOSICIO Tipus_Vehicle_Codi Import_Nominal_¬Ä";
+    string cabecera = "Data_Infraccio Hora_Infraccio Codi_Carrer Nom_Carrer Num_Carrer Codi_Districte Nom_Districte Codi_Barri Nom_Barri Seccio_Censal Longitud_WGS84 Latitud_WGS84 Infraccio_Codi SUBTIPUS_EXPEDIENT Grua MITJA_IMPOSICIO Tipus_Vehicle_Codi Import_Nominal_?";
     ofstream fout(FICHERO_DENUNCIAS_BARCELONA);
 
     fout << cabecera << endl;
@@ -841,7 +841,7 @@ void DescripcionDenuncia(const t_denuncia& t, const t_zonas& z, const v_multa& v
     else                      nom_districte=z.vd[t.codi_districte];
     if (t.codi_barri==-1)     nom_barri="Indefinido";
     else                      nom_barri=z.vb[t.codi_barri];
-    if (t.grua==1)            grua = "S√≠";
+    if (t.grua==1)            grua = "SÌ";
     else if (t.grua==0)       grua = "No";
     else                      grua = "No especificado";
     cout << endl << "(Los valores en -1 significan un valor indefinido)" << endl;
@@ -858,7 +858,7 @@ void DescripcionDenuncia(const t_denuncia& t, const t_zonas& z, const v_multa& v
     if (t.minuto!=-1) cout<<t.minuto;
     else cout << "-";
     cout << endl;
-    cout << "Ubicaci√≥n: " << t.num_carrer << endl << t.nom_carrer << endl << "Distrito: " << nom_districte << endl << "Barrio: "
+    cout << "UbicaciÛn: " << t.num_carrer << endl << t.nom_carrer << endl << "Distrito: " << nom_districte << endl << "Barrio: "
     << nom_barri << endl << "Lat: " << t.latitud << endl << "Lon:" << t.longitud << "," << endl << "S.C: " << t.seccio_censal << endl;
     cout << "Grua: " << grua << endl << "Codigo_infraccion: " << t.infraccio_codi << endl << "Importe: " << t.import << endl << "Subtipo_expediente: " << t.subtipus_exp << endl << "Medio_imposicion: "
     << t.mitja_impos << endl << "Tipo_vehiculo: " << t.tipus_vehicle << endl;
@@ -878,52 +878,52 @@ t_denuncia GenerarDenuncia(t_zonas&z,bool denunciaNueva, const v_multa&v1) {
     bool denuncia_valida=false;
     while (!denuncia_valida) {
         cout << endl <<  MENSAJE_ENTRADA_DATOS;
-        cout << "Introduce el a√±o, el mes, el dia, la hora y minuto, separados por espacios ( ej: 2024 11 3 13 -1) -->";
+        cout << "Introduce el aÒo, el mes, el dia, la hora y minuto, separados por espacios ( ej: 2024 11 3 13 -1) -->";
         cin >> r.any >> r.mes >> r.dia >> r.hora >> r.minuto;
 
         int esp;
-        cout << "Desea especificar zona? (1=s√≠ 0=No) --> "; cin >> esp;
+        cout << "Desea especificar zona? (1=sÌ 0=No) --> "; cin >> esp;
         if (esp==1) {
-            cout << "Introduce el c√≥digo de calle, n√∫mero de calle, c√≥digo de distrito, c√≥digo de barrio y secci√≥n censal (ej: 701433 -1 4 19 -1 )";
+            cout << "Introduce el cÛdigo de calle, n˙mero de calle, cÛdigo de distrito, cÛdigo de barrio y secciÛn censal (ej: 701433 -1 4 19 -1 )";
             cin >> r.codi_carrer >> r.num_carrer >> r.codi_districte >> r.codi_barri >> r.seccio_censal;
             cout << "Introduce coordenadas, Longitud y Latitud (ej 2.176944 41.423317 ) -->"; cin >> r.longitud >> r.latitud;
         } else {r.codi_carrer=-1;r.num_carrer=-1;r.codi_districte=-1;r.codi_barri=-1;r.seccio_censal=-1;r.longitud=-1;r.latitud=-1;}
 
         if (!denunciaNueva) {
-            cout << "Desea especificar tipo de sanci√≥n? (1=S√≠ 0=No) --> "; cin >> esp;
+            cout << "Desea especificar tipo de sanciÛn? (1=SÌ 0=No) --> "; cin >> esp;
         }
         if (esp==1 or denunciaNueva) {
-            cout << "Introduce codigo sanci√≥n y importe nominal (ej: 1005 90) -->"; cin >> r.infraccio_codi >> r.import;
+            cout << "Introduce codigo sanciÛn y importe nominal (ej: 1005 90) -->"; cin >> r.infraccio_codi >> r.import;
             cout << "Introduce subtipo_expediente medio_imposicion y tipus_vehicle_codi (tres strings, ej: CR PAP T ): "; cin >> r.subtipus_exp >> r.mitja_impos >> r.tipus_vehicle;
         } else  {r.infraccio_codi=-1; r.import=-1;r.subtipus_exp="-1"; r.mitja_impos="-1"; r.tipus_vehicle="-1";}
 
-        cout << "Ha requerido de una grua? (1=S√≠; 0=No; -1=No se especif√≠ca) -->"; cin >> r.grua;
+        cout << "Ha requerido de una grua? (1=SÌ; 0=No; -1=No se especifÌca) -->"; cin >> r.grua;
 
-        // Validaci√≥n de datos introducidos: (Algunos valores solo se validan si se esta declarando una nueva denuncia, para hacer b√∫squedas no es necesario)
+        // ValidaciÛn de datos introducidos: (Algunos valores solo se validan si se esta declarando una nueva denuncia, para hacer b˙squedas no es necesario)
         bool existe_codigo_infraccion; int n_infraccion;
         BusquedaVectores1(v1,n_infraccion, existe_codigo_infraccion, r.infraccio_codi);
         if (r.codi_barri >= BARRIOS_BCN) { denuncia_valida=false; cout << "Error: El codigo de barrio debe estar entre 0 y " << (BARRIOS_BCN-1) << endl; }
         else if (r.codi_districte >= DISTRITOS_BCN) {denuncia_valida=false; cout << "Error: El codigo de distrito debe estar entre 0 y " << (DISTRITOS_BCN-1) << endl; }
         else if (r.mes > 12 or r.dia > 31 or r.hora > 23 or r.minuto > 60 ) {denuncia_valida=false; cout << "Error: La fecha, hora o minuto introducido es invalido" << endl;}
         else if (denunciaNueva and (r.any<0 or r.mes<0 or r.dia<0 or r.hora<0 or r.minuto<0) ) {denuncia_valida=false; cout << "Error: Para generar una nueva denuncia es obligatorio definir la fecha, hora y minuto" << endl;}
-        else if (!existe_codigo_infraccion and denunciaNueva)  {denuncia_valida=false; cout << "Error: El c√≥digo de infracci√≥n introducido no est√° registrado, por favor, registre primero el tipo de infracci√≥n antes de generar una denuncia" << endl;}
-        else if (r.grua!=1 and r.grua !=0 and r.grua != -1) {denuncia_valida=false; cout << "Error: El n√∫mero introducido que define si se ha requerido grua es invalido" << endl;}
+        else if (!existe_codigo_infraccion and denunciaNueva)  {denuncia_valida=false; cout << "Error: El cÛdigo de infracciÛn introducido no est· registrado, por favor, registre primero el tipo de infracciÛn antes de generar una denuncia" << endl;}
+        else if (r.grua!=1 and r.grua !=0 and r.grua != -1) {denuncia_valida=false; cout << "Error: El n˙mero introducido que define si se ha requerido grua es invalido" << endl;}
         else {
-            // Cuando el c√≥digo llega aqu√≠ es que la denuncia generada es v√°lida (pero falta confirmaci√≥n por parte del usuario)
+            // Cuando el cÛdigo llega aquÌ es que la denuncia generada es v·lida (pero falta confirmaciÛn por parte del usuario)
             denuncia_valida=true;
 
-            // Validaci√≥n de c√≥digo barrio
+            // ValidaciÛn de cÛdigo barrio
             if (r.codi_barri >= 0 and z.vb[r.codi_barri]=="" ) {
-                cout << "El barrio con c√≥digo " << r.codi_barri << " no est√° registrado, introduce su nombre (reemplaza los espacios por '_') -->" << endl;
+                cout << "El barrio con cÛdigo " << r.codi_barri << " no est· registrado, introduce su nombre (reemplaza los espacios por '_') -->" << endl;
                 cin >> z.vb[r.codi_barri];
             }
-            // Validaci√≥n distrito
+            // ValidaciÛn distrito
             if (r.codi_districte >= 0 and z.vd[r.codi_districte]=="") {
-                cout << "El distrito con c√≥digo " << r.codi_districte << " no est√° registrado, introduce su nombre (reemplaza los espacios por '_')" << endl;
+                cout << "El distrito con cÛdigo " << r.codi_districte << " no est· registrado, introduce su nombre (reemplaza los espacios por '_')" << endl;
                 cin >> z.vd[r.codi_districte];
             }
 
-            // Validaci√≥n de c√≥digo de calle
+            // ValidaciÛn de cÛdigo de calle
             t_calle c;
             bool existe_calle;
 
@@ -932,7 +932,7 @@ t_denuncia GenerarDenuncia(t_zonas&z,bool denunciaNueva, const v_multa&v1) {
                 c = BuscarCalle(z,r.codi_carrer,existe_calle);
                 if (existe_calle)   r.nom_carrer = c.nombre;
                 else {
-                    cout << "La calle con c√≥digo " << r.codi_carrer << " no est√° registrada, introduce su nombre (reemplaza los espacios por '_') -->";
+                    cout << "La calle con cÛdigo " << r.codi_carrer << " no est· registrada, introduce su nombre (reemplaza los espacios por '_') -->";
                     cin >> c.nombre;
                     c.codigo = r.codi_carrer;
                     z.vc.push_back(c);
@@ -943,7 +943,7 @@ t_denuncia GenerarDenuncia(t_zonas&z,bool denunciaNueva, const v_multa&v1) {
             cout << "Se han introducido los siguientes datos: " << endl;
             DescripcionDenuncia(r,z,v1);
             string respuesta;
-            cout << "Son correctos? (1=S√≠ 0=No) -->"; cin >> respuesta;
+            cout << "Son correctos? (1=SÌ 0=No) -->"; cin >> respuesta;
             if (respuesta=="1") denuncia_valida=true;
             else                denuncia_valida=false;
         }
@@ -951,7 +951,7 @@ t_denuncia GenerarDenuncia(t_zonas&z,bool denunciaNueva, const v_multa&v1) {
     return r;
 }
 
-vector<int> FiltrarDenuncias(const v_denuncia& v1, t_denuncia r) { // Devuelve un vector con los √≠ndices de las denuncias encontradas
+vector<int> FiltrarDenuncias(const v_denuncia& v1, t_denuncia r) { // Devuelve un vector con los Ìndices de las denuncias encontradas
     // Devuelve las denuncias filtradas: Aquellas que encajan con los valores de la denuncia r (los valores en r de -1 significan que no se especifica)
     // se filtra por espacio y tiempo
     //v_denuncia v1f;
@@ -969,7 +969,7 @@ vector<int> FiltrarDenuncias(const v_denuncia& v1, t_denuncia r) { // Devuelve u
 }
 
 void ConsultaInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
-    cout << "A continuaci√≥n debes introducir los datos sobre la denuncia/denuncias que deseas consultar/modificar/eliminar: " << endl;
+    cout << "A continuaciÛn debes introducir los datos sobre la denuncia/denuncias que deseas consultar/modificar/eliminar: " << endl;
     t_denuncia r = GenerarDenuncia(z,false,v2);
     RegistrarLog(logs, "Denuncias", "Consulta", "-");
     vector<int> v1f = FiltrarDenuncias(v1,r); // Devuelve un vector con indices de v1
@@ -980,7 +980,7 @@ void ConsultaInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
         int i=0;
         int opcion;
         while (!salir) {
-            cout << endl << "Informaci√≥n sobre denuncia " << i+1 << "/" << v1f.size() << ": ";
+            cout << endl << "InformaciÛn sobre denuncia " << i+1 << "/" << v1f.size() << ": ";
             DescripcionDenuncia(v1[v1f[i]], z, v2);
             cout << "Que desea hacer? " << endl
             << "1. Salir" << endl
@@ -991,10 +991,10 @@ void ConsultaInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
             if (opcion==1) salir=true;
             else if (opcion==2) {
                 ModificarInfoE1(v1, z, v1f[i], v2 );
-                v1f =  FiltrarDenuncias(v1,r); // Actualizar vector de √≠ndices v1f
+                v1f =  FiltrarDenuncias(v1,r); // Actualizar vector de Ìndices v1f
             } else if (opcion==3) {
                 EliminarInfoE1(v1,z,v1f[i]);
-                v1f =  FiltrarDenuncias(v1,r); // Actualizar vector de √≠ndices v1f
+                v1f =  FiltrarDenuncias(v1,r); // Actualizar vector de Ìndices v1f
             } else if (opcion==4) {
                 i++;
             }
@@ -1005,7 +1005,7 @@ void ConsultaInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
 }
 
 void AnadirInfoE1(v_denuncia& v1, t_zonas& z, const v_multa& v2) {
-    cout << "A continuaci√≥n debes introducir los datos de la denuncia que desea generar: " << endl;
+    cout << "A continuaciÛn debes introducir los datos de la denuncia que desea generar: " << endl;
     t_denuncia d = GenerarDenuncia(z, true, v2);
     v1.push_back(d);
     RegistrarLog(logs, "Denuncia", "Alta", String(d.infraccio_codi));
@@ -1038,8 +1038,8 @@ void ModificarInfoE1(v_denuncia& v1, t_zonas& z, int i, const v_multa& v2) {
         t_denuncia d = v1[i];
         cout << "Que desea modificar?" << endl
         <<      "1. Fecha " << endl
-        <<      "2. Ubicaci√≥n" << endl
-        <<      "3. Infracci√≥n" << endl
+        <<      "2. UbicaciÛn" << endl
+        <<      "3. InfracciÛn" << endl
         <<      "4. Otros valores" << endl
         <<      "5. Finalizar" << endl
         <<       "-->";
@@ -1047,7 +1047,7 @@ void ModificarInfoE1(v_denuncia& v1, t_zonas& z, int i, const v_multa& v2) {
         bool entrada_valida=false;
         if (opcion==1) {
             while (!entrada_valida) {
-                cout << "Introduce a√±o, mes, dia, hora y minuto ( Actual: " << d.any << " " << d.mes << " " << d.dia << " " << d.hora << " " << d.minuto << ") -->";
+                cout << "Introduce aÒo, mes, dia, hora y minuto ( Actual: " << d.any << " " << d.mes << " " << d.dia << " " << d.hora << " " << d.minuto << ") -->";
                 cin >> v1[i].any >> v1[i].mes >> v1[i].dia >> v1[i].hora >> v1[i].minuto;
                 if (v1[i].any < -1 or (v1[i].mes!= -1 and v1[i].mes < 1) or v1[i].mes > 12 or v1[i].dia > 31 or (v1[i].dia!=-1 and v1[i].dia<1)
                     or v1[i].hora > 23 or v1[i].hora < -1 or v1[i].minuto > 59 or v1[i].minuto < -1) {
@@ -1056,20 +1056,20 @@ void ModificarInfoE1(v_denuncia& v1, t_zonas& z, int i, const v_multa& v2) {
             }
         } else if (opcion==2) {
             while (!entrada_valida) {
-                cout << "Introduce el codigo de calle, numero de calle, codigo de distrito, codigo de barrio y secci√≥n censal (Actual: " << d.codi_carrer << " " << d.num_carrer << " " << d.codi_districte << " " << d.codi_barri << " " << d.seccio_censal << " ) -->";
+                cout << "Introduce el codigo de calle, numero de calle, codigo de distrito, codigo de barrio y secciÛn censal (Actual: " << d.codi_carrer << " " << d.num_carrer << " " << d.codi_districte << " " << d.codi_barri << " " << d.seccio_censal << " ) -->";
                 cin >> v1[i].codi_carrer >> v1[i].num_carrer >> v1[i].codi_districte >> v1[i].codi_barri >> v1[i].seccio_censal;
                 entrada_valida=false;
                 if (v1[i].codi_barri >= BARRIOS_BCN) { cout << "Error: El codigo de barrio debe estar entre 0 y " << (BARRIOS_BCN-1) << endl; }
                 else if (v1[i].codi_districte >= DISTRITOS_BCN) {cout << "Error: El codigo de distrito debe estar entre 0 y " << (DISTRITOS_BCN-1) << endl; }
                 else { entrada_valida=true;
-                    // Validaci√≥n de c√≥digo de calle
+                    // ValidaciÛn de cÛdigo de calle
                     t_calle c; bool existe_calle;
                     if (v1[i].codi_carrer < 0)  v1[i].nom_carrer = "Indefinida";
                     else {
                         c = BuscarCalle(z,v1[i].codi_carrer,existe_calle);
                         if (existe_calle)   v1[i].nom_carrer = c.nombre;
                         else {
-                            cout << "La calle con c√≥digo " << v1[i].codi_carrer << " no est√° registrada, introduce su nombre (reemplaza los espacios por '_') -->";
+                            cout << "La calle con cÛdigo " << v1[i].codi_carrer << " no est· registrada, introduce su nombre (reemplaza los espacios por '_') -->";
                             cin >> c.nombre;
                             c.codigo = v1[i].codi_carrer;
                             z.vc.push_back(c);
@@ -1082,37 +1082,37 @@ void ModificarInfoE1(v_denuncia& v1, t_zonas& z, int i, const v_multa& v2) {
             cin >> v1[i].longitud >> v1[i].latitud;
         } else if (opcion==3) {
             while (!entrada_valida) {
-                cout << "Introduce codigo sanci√≥n (Actual: " << d.infraccio_codi << " ) -->";
+                cout << "Introduce codigo sanciÛn (Actual: " << d.infraccio_codi << " ) -->";
                 cin >> v1[i].infraccio_codi;
                 bool existe_codigo_infraccion; int n_infraccion;
                 BusquedaVectores1(v2,n_infraccion, existe_codigo_infraccion, v1[i].infraccio_codi);
                 if (!existe_codigo_infraccion) {
-                    cout << "El c√≥digo de infracci√≥n introducido es inv√°lido, por favor, registre primero el tipo de infracci√≥n" << endl;
+                    cout << "El cÛdigo de infracciÛn introducido es inv·lido, por favor, registre primero el tipo de infracciÛn" << endl;
                     entrada_valida=false;
                 } else {v1[i].import = v2[n_infraccion].import; entrada_valida=true;}
             }
         } else if (opcion==4) {
             while (!entrada_valida) {
-                cout << "Ha requerido grua? (1=S√≠ 0=No -1=No especifica) -->"; cin >> v1[i].grua;
+                cout << "Ha requerido grua? (1=SÌ 0=No -1=No especifica) -->"; cin >> v1[i].grua;
                 if (v1[i].grua > 1 or v1[i].grua < -1) entrada_valida=false;
                 else                                   entrada_valida=true;
             }
         } else if (opcion==5) {
-            cout << "La denuncia modificada ha quedado as√≠: " << endl;
+            cout << "La denuncia modificada ha quedado asÌ: " << endl;
             DescripcionDenuncia(v1[i],z, v2);
-            cout << "Es correcto? (1=S√≠ 0=No)"; cin >> opcion;
+            cout << "Es correcto? (1=SÌ 0=No)"; cin >> opcion;
             if (opcion==1) salir=true;
             else           salir=false;
         }
     }
     ModificarFicheroE1(v1,z);
     RegistrarLog(logs, "Denuncia", "Modificado", String(v1[i].infraccio_codi));
-    cout << "Denuncia modificada con √©xito." << endl << endl;
+    cout << "Denuncia modificada con Èxito." << endl << endl;
 }
 
-//Espec√≠ficas Mykola Stefanskyy Tomchuk
+//EspecÌficas Mykola Stefanskyy Tomchuk
 
-bool MenuEspecificas1(v_denuncia&v1, v_multa&v2, v_imposicio&v3){ //Men√∫ de las funcionalidades espec√≠ficas (denuncias)
+bool MenuEspecificas1(v_denuncia&v1, v_multa&v2, v_imposicio&v3){ //Men˙ de las funcionalidades especÌficas (denuncias)
 
     int opcion;
     cout << MENU_ESPECIFICAS_1;
@@ -1127,14 +1127,14 @@ bool MenuEspecificas1(v_denuncia&v1, v_multa&v2, v_imposicio&v3){ //Men√∫ de las
         case 5: MedioImposicionMasComun(v1,v3); break;
         case 6: BuscadorMedioImposicionCantidad(v1); break;
         case 7: break;
-        default: cout << "Opci√≥n no v√°lida" << endl; break;
+        default: cout << "OpciÛn no v·lida" << endl; break;
     }
     return opcion == 7;
 }
 
-void MesDiaRecaudacionInfraccion(const v_denuncia&v1){ //Este subprograma permite encontrar el mes y el d√≠a con m√°s recaudaci√≥n y, adem√°s, el mes y el d√≠a que se han cometido m√°s infracciones.
+void MesDiaRecaudacionInfraccion(const v_denuncia&v1){ //Este subprograma permite encontrar el mes y el dÌa con m·s recaudaciÛn y, adem·s, el mes y el dÌa que se han cometido m·s infracciones.
 
-    //Variables recaudaci√≥n
+    //Variables recaudaciÛn
     int mesant = v1[0].mes, diaant = v1[0].dia, mesrecaud, diarecaud, mesdiarecaud;
     double totaldineromes = 0, totaldinerodia = 0, mayormes = 0, mayordia = 0;
 
@@ -1143,10 +1143,10 @@ void MesDiaRecaudacionInfraccion(const v_denuncia&v1){ //Este subprograma permit
 
     for (int i = 0; i < v1.size(); i++){
         if (v1[i].dia == diaant){
-            totaldinerodia = totaldinerodia + v1[i].import; //Se almacena la recaudaci√≥n diaria siempre que sea del mismo d√≠a
-            numinfdia++;}  //Se van a√±adiendo infracciones siempre que sea del mismo d√≠a
+            totaldinerodia = totaldinerodia + v1[i].import; //Se almacena la recaudaciÛn diaria siempre que sea del mismo dÌa
+            numinfdia++;}  //Se van aÒadiendo infracciones siempre que sea del mismo dÌa
         else {
-        //Cuando cambia el d√≠a, comprobamos si este ha sido el d√≠a con mayor recaudaci√≥n y/o con mayor n√∫mero de infracciones
+        //Cuando cambia el dÌa, comprobamos si este ha sido el dÌa con mayor recaudaciÛn y/o con mayor n˙mero de infracciones
             if (totaldinerodia > mayordia){
                 mayordia = totaldinerodia;
                 diarecaud = diaant;
@@ -1159,7 +1159,7 @@ void MesDiaRecaudacionInfraccion(const v_denuncia&v1){ //Este subprograma permit
             totaldinerodia = v1[i].import;
             diaant = v1[i].dia;}
 
-        if (v1[i].mes == mesant){ //Proceso an√°logo que el anterior, pero en este caso con los meses del a√±o
+        if (v1[i].mes == mesant){ //Proceso an·logo que el anterior, pero en este caso con los meses del aÒo
             totaldineromes = totaldineromes + v1[i].import;
             numinfmes++;}
         else {
@@ -1173,7 +1173,7 @@ void MesDiaRecaudacionInfraccion(const v_denuncia&v1){ //Este subprograma permit
             totaldineromes = v1[i].import;
             mesant = v1[i].mes;}
             }
-    //Comprobaci√≥n del √∫ltimo d√≠a y mes, ya que en estos el bucle no comprueba si tiene alg√∫n elemento m√°ximo
+    //ComprobaciÛn del ˙ltimo dÌa y mes, ya que en estos el bucle no comprueba si tiene alg˙n elemento m·ximo
     if (totaldinerodia > mayordia){
         mayordia = totaldinerodia;
         diarecaud = diaant;
@@ -1192,22 +1192,22 @@ void MesDiaRecaudacionInfraccion(const v_denuncia&v1){ //Este subprograma permit
         masinfmes = numinfmes;
         mesinf = mesant;}
 
-    cout << "D√≠a con la mayor recaudaci√≥n: " << diarecaud << "/" << mesdiarecaud << " con " << mayordia << " euros recaudados." << endl;
-    cout << "Mes con la mayor recaudaci√≥n: " << mesrecaud << " con " << mayormes << " euros recaudados." << endl;
-    cout << "D√≠a con el mayor n√∫mero de infracciones: " << diainf << "/" << mesdiainf << " con " << masinfdia << " infracciones." << endl;
-    cout << "Mes con el mayor n√∫mero de infracciones: " << mesinf << " con " << masinfmes << " infracciones." << endl << endl;
+    cout << "DÌa con la mayor recaudaciÛn: " << diarecaud << "/" << mesdiarecaud << " con " << mayordia << " euros recaudados." << endl;
+    cout << "Mes con la mayor recaudaciÛn: " << mesrecaud << " con " << mayormes << " euros recaudados." << endl;
+    cout << "DÌa con el mayor n˙mero de infracciones: " << diainf << "/" << mesdiainf << " con " << masinfdia << " infracciones." << endl;
+    cout << "Mes con el mayor n˙mero de infracciones: " << mesinf << " con " << masinfmes << " infracciones." << endl << endl;
     RegistrarLog(logs, "Especifica", "MesDiaConMasRecaudacion", "-");
 }
 
-void UsoGrua(const v_denuncia&v1){ //Subprograma que permite ver el n√∫mero y el porcentaje de denuncias que han requerido el uso de gr√∫a
+void UsoGrua(const v_denuncia&v1){ //Subprograma que permite ver el n˙mero y el porcentaje de denuncias que han requerido el uso de gr˙a
     int numgrua = 0;
     for (int i = 0; i < v1.size(); i++){
         if (v1[i].grua == 1) numgrua++;}
-    cout << numgrua << " denuncias han requerido el uso de gr√∫a, es decir, un ";
+    cout << numgrua << " denuncias han requerido el uso de gr˙a, es decir, un ";
     cout << (float(numgrua)/v1.size())*100 << "%." << endl << endl;
 }
 
-void LlenarVectorDenunciaCodigo(const v_denuncia&v1, v_dencodigo&v4){ //Subprograma que permite llenar el vector v4, en el cual se ven reflejado la denuncia (por c√≥digo) y su cantidad
+void LlenarVectorDenunciaCodigo(const v_denuncia&v1, v_dencodigo&v4){ //Subprograma que permite llenar el vector v4, en el cual se ven reflejado la denuncia (por cÛdigo) y su cantidad
 
     bool trobat = false;
     t_dencodigo x;
@@ -1228,7 +1228,7 @@ void LlenarVectorDenunciaCodigo(const v_denuncia&v1, v_dencodigo&v4){ //Subprogr
     }
 }
 
-void DenunciaMasComun(const v_denuncia&v1, const v_multa&v2){ //Mediante el proceso de llenar el vector v4, este subprograma encuentra la m√°s com√∫n
+void DenunciaMasComun(const v_denuncia&v1, const v_multa&v2){ //Mediante el proceso de llenar el vector v4, este subprograma encuentra la m·s com˙n
 
     v_dencodigo v4;
     int mascomun = 0, denmascomun;
@@ -1243,18 +1243,18 @@ void DenunciaMasComun(const v_denuncia&v1, const v_multa&v2){ //Mediante el proc
             denmascomun = v4[k].codi;
         }
     }
-    cout << "La denuncia m√°s com√∫n tiene como c√≥digo " << denmascomun << " y ha tenido " << mascomun << " incidencias, ";
+    cout << "La denuncia m·s com˙n tiene como cÛdigo " << denmascomun << " y ha tenido " << mascomun << " incidencias, ";
     cout << "hecho que representa el " << (float(mascomun)/v1.size())*100 << "% de las denuncias." << endl;
-    cout << "¬øDesea consultar informaci√≥n sobre este tipo de denuncia (S o N)?\n --> ";
+    cout << "øDesea consultar informaciÛn sobre este tipo de denuncia (S o N)?\n --> ";
     while (!valido){
         cin >> consulta;
         if (consulta == "S"){ConsultaInfoE2(v2, denmascomun); valido = true;}
-        else if (consulta == "N") {cout << "Volviendo al men√∫... " << endl << endl; valido = true;}
-        else cout << "Introduce una opci√≥n v√°lida \n --> " << endl;
+        else if (consulta == "N") {cout << "Volviendo al men˙... " << endl << endl; valido = true;}
+        else cout << "Introduce una opciÛn v·lida \n --> " << endl;
     }
 }
 
-void BuscadorDenunciasCantidad(const v_denuncia&v1){ //Subprograma que permite buscar la denuncia por c√≥digo y, de esta forma, ver la cantidad de infracciones realizadas
+void BuscadorDenunciasCantidad(const v_denuncia&v1){ //Subprograma que permite buscar la denuncia por cÛdigo y, de esta forma, ver la cantidad de infracciones realizadas
 
     v_dencodigo v4;
     int cant, codigo;
@@ -1262,7 +1262,7 @@ void BuscadorDenunciasCantidad(const v_denuncia&v1){ //Subprograma que permite b
 
     LlenarVectorDenunciaCodigo(v1, v4);
 
-    cout << "Introduzca el c√≥digo para consultar la cantidad de denuncias registradas:\n --> ";
+    cout << "Introduzca el cÛdigo para consultar la cantidad de denuncias registradas:\n --> ";
     cin >> codigo;
 
     for (int i = 0; i < v4.size() && !trobat; i++){
@@ -1323,14 +1323,14 @@ void MedioImposicionMasComun (const v_denuncia&v1, const v_imposicio&v3){
             }
     }
 
-    cout << "La denuncia m√°s com√∫n tiene como medio de imposicion " << impmascomun_desc << " (" << impmascomun << ") y ha tenido " << mascomun << " incidencias, ";
+    cout << "La denuncia m·s com˙n tiene como medio de imposicion " << impmascomun_desc << " (" << impmascomun << ") y ha tenido " << mascomun << " incidencias, ";
     cout << "hecho que representa el " << (float(mascomun)/v1.size())*100 << "% de las denuncias." << endl;
     while (!valido){
-        cout << "¬øQuiere consultar informaci√≥n sobre este medio de imposici√≥n?\n --> ";
+        cout << "øQuiere consultar informaciÛn sobre este medio de imposiciÛn?\n --> ";
         cin >> consulta;
         if (consulta == "S"){ConsultaInfoE3(v3, impmascomun); valido = true;}
-        else if (consulta == "N") {cout << "Volviendo al men√∫... " << endl << endl; valido = true;}
-        else cout << "Introduce una opci√≥n v√°lida \n --> " << endl;
+        else if (consulta == "N") {cout << "Volviendo al men˙... " << endl << endl; valido = true;}
+        else cout << "Introduce una opciÛn v·lida \n --> " << endl;
 
     }
 
@@ -1345,18 +1345,18 @@ void BuscadorMedioImposicionCantidad(const v_denuncia&v1){
 
     LlenarVectorDenunciaImp(v1, v5);
 
-    cout << "Introduzca el medio de imposici√≥n para consultar la cantidad de denuncias registradas:\n --> ";
+    cout << "Introduzca el medio de imposiciÛn para consultar la cantidad de denuncias registradas:\n --> ";
     cin >> imp;
 
     for (int i = 0; i < v5.size() && !trobat; i++){
         if (imp == v5[i].imp){trobat = true; cant = v5[i].num;}
     }
-    if (!trobat) cout << "No se ha encontrado el medio de imposici√≥n." << endl << endl;
-    else cout << "Este tipo de medio de imposici√≥n ha tenido un total de " << cant << " denuncias registradas." << endl << endl;
+    if (!trobat) cout << "No se ha encontrado el medio de imposiciÛn." << endl << endl;
+    else cout << "Este tipo de medio de imposiciÛn ha tenido un total de " << cant << " denuncias registradas." << endl << endl;
 }
 
 
-// Espec√≠ficas Rafael Gras
+// EspecÌficas Rafael Gras
 bool MenuEspecificas2(v_denuncia&v1, v_multa&v2, v_imposicio&v3, t_zonas& z) {
     int opcion;
     cout << MENU_ESPECIFICAS_2;
@@ -1381,7 +1381,7 @@ bool MenuEspecificas2(v_denuncia&v1, v_multa&v2, v_imposicio&v3, t_zonas& z) {
             }
             break;}
         case 4: {
-            cout << "A continuaci√≥n debes introducir los datos para filtrar las denuncias (especifica solo aquellos valores necesarios): " << endl;
+            cout << "A continuaciÛn debes introducir los datos para filtrar las denuncias (especifica solo aquellos valores necesarios): " << endl;
             t_denuncia r = GenerarDenuncia(z,false,v2);
             RegistrarLog(logs, "Especificas-filtradas-por-zona", "-", "-");
             vector<int> indices = FiltrarDenuncias(v1,r); // Devuelve un vector con indices de v1
@@ -1391,12 +1391,12 @@ bool MenuEspecificas2(v_denuncia&v1, v_multa&v2, v_imposicio&v3, t_zonas& z) {
             while (!MenuEspecificas1(v1f,v2,v3));
         }
         case 5: break;
-        default: cout << "Opci√≥n no v√°lida" << endl; break;
+        default: cout << "OpciÛn no v·lida" << endl; break;
     }
     return opcion == 5;
 }
 
-// Validaci√≥n de datos de la base de datos de la entidad 1
+// ValidaciÛn de datos de la base de datos de la entidad 1
 
 void ValidacionDatos(const v_denuncia&v1, const v_multa&v2, const v_imposicio&v3, const t_zonas&z) {
 
@@ -1432,11 +1432,11 @@ void ValidacionDatos(const v_denuncia&v1, const v_multa&v2, const v_imposicio&v3
         // Validamos Zonas
         else if ( (v1[i].codi_districte >= DISTRITOS_BCN or v1[i].codi_districte < 0 ) && v1[i].codi_districte != -1) {
             error = true;
-            error_causa = "Distrito inv√°lido";
+            error_causa = "Distrito inv·lido";
         }
         else if ( (v1[i].codi_barri >= BARRIOS_BCN or v1[i].codi_barri < 0) && v1[i].codi_barri != -1) {
              error = true;
-             error_causa = "Barrio inv√°lido";
+             error_causa = "Barrio inv·lido";
         }
 
         //Validamos si existe la multa
@@ -1450,11 +1450,11 @@ void ValidacionDatos(const v_denuncia&v1, const v_multa&v2, const v_imposicio&v3
             }
             if(!trobat) {
                 error = true;
-                error_causa = "C√≥digo de multa no existe";
+                error_causa = "CÛdigo de multa no existe";
             }
             else if (v1[i].import != v2[n].import){
                error = true;
-               error_causa = "Importe no concuerda con la √∫ltima normativa";
+               error_causa = "Importe no concuerda con la ˙ltima normativa";
                errorimporte = true;
             }
         }
@@ -1472,7 +1472,7 @@ void ValidacionDatos(const v_denuncia&v1, const v_multa&v2, const v_imposicio&v3
                 error_causa = "Subtipo expediente no existe"; }
         }
 
-        //Validamos si existe el medio de imposici√≥n
+        //Validamos si existe el medio de imposiciÛn
         if (!error && v1[i].mitja_impos != "" && v1[i].mitja_impos != "-1") {
             trobat = false;
             for(int k = 0; k < v3.size() && !trobat; k++) {
@@ -1482,10 +1482,10 @@ void ValidacionDatos(const v_denuncia&v1, const v_multa&v2, const v_imposicio&v3
             }
             if(!trobat) {
                 error = true;
-                error_causa = "Medio de imposici√≥n no existe"; }
+                error_causa = "Medio de imposiciÛn no existe"; }
         }
         if (error) {
-            cout << endl << "Hay un error en la denuncia n√∫mero " << i+1 << " y tiene como causa: " << error_causa << endl;
+            cout << endl << "Hay un error en la denuncia n˙mero " << i+1 << " y tiene como causa: " << error_causa << endl;
             if (errorimporte) cout << "Su importe real es: " << v2[n].import << endl;
 
             DescripcionDenuncia(v1[i], z, v2); //Mostramos la denuncia completa
@@ -1496,11 +1496,11 @@ void ValidacionDatos(const v_denuncia&v1, const v_multa&v2, const v_imposicio&v3
                 cin >> respuesta;
                 if (respuesta == 'N') {salir = true; resp = false;}
                 else if (respuesta == 'S') {cout << "Retomando proceso... " << endl; resp = false;}
-                else cout << "Introduce una respuesta v√°lida." << endl;
+                else cout << "Introduce una respuesta v·lida." << endl;
             }
         }
     }
-    cout << endl << "Validaci√≥n finalizada." << endl;
+    cout << endl << "ValidaciÛn finalizada." << endl;
 }
 
 // Otros:
