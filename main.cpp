@@ -1326,6 +1326,7 @@ void MedioImposicionMasComun (const v_denuncia&v1, const v_imposicio&v3){
     cout << "La denuncia más común tiene como medio de imposicion " << impmascomun_desc << " (" << impmascomun << ") y ha tenido " << mascomun << " incidencias, ";
     cout << "hecho que representa el " << (float(mascomun)/v1.size())*100 << "% de las denuncias." << endl;
     while (!valido){
+        cout << "¿Quiere consultar información sobre este medio de imposición?\n --> ";
         cin >> consulta;
         if (consulta == "S"){ConsultaInfoE3(v3, impmascomun); valido = true;}
         else if (consulta == "N") {cout << "Volviendo al menú... " << endl << endl; valido = true;}
