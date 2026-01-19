@@ -1156,7 +1156,6 @@ void MesDiaRecaudacionInfraccion(const v_denuncia&v1){ //Este subprograma permit
                 diainf = diaant;
                 mesdiainf = mesant;}
             numinfdia = 1;
-            totaldinerodia = 0;
             totaldinerodia = v1[i].import;
             diaant = v1[i].dia;}
 
@@ -1171,7 +1170,6 @@ void MesDiaRecaudacionInfraccion(const v_denuncia&v1){ //Este subprograma permit
                 masinfmes = numinfmes;
                 mesinf = mesant;}
             numinfmes = 1;
-            totaldineromes = 0;
             totaldineromes = v1[i].import;
             mesant = v1[i].mes;}
             }
@@ -1521,3 +1519,4 @@ string String(int n) {
     if (negativo) r='-' + r;
     return r;
 }
+
