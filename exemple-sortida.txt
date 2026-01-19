@@ -1,0 +1,299 @@
+Inicializando Gestor-Denuncias-Barcelona...
+
+Leyendo fichero 2024_4t_denuncies_sancions_transit_detall.txt
+
+Se han leído 50000 denuncias
+Se han leído 100000 denuncias
+Se han leído 150000 denuncias
+Se han leído 200000 denuncias
+Se han cargado 213547 denuncias de tráfico.
+Se han encontrado 2836 calles distintas.
+
+Leyendo fichero 2024_denuncies_sancions_transit_codis.txt
+
+Se han leído 608 tipos de infracciones.
+
+Leyendo fichero 2024_denuncies_sancions_transit_conceptes_annex.txt
+Se han leído 17 subtipos de expediente.
+
+
+Selecciona el tipo de accion desea hacer:
+1. Acciones básicas sobre la entidad "1: infracciones/denuncias Barcelona"
+2. Acciones básicas sobre la entidad "2: tipos de multas"
+3. Acciones básicas sobre la entidad "3: medio imposición"
+4. A. Específicas: Diagnóstico de denuncias en Barcelona
+5. A. Específicas: Diagnóstico de denuncias en una zona específica
+6. A. Específicas: Validación de datos
+7. Salir del programa
+ --> 5
+
+¿Qué quiere hacer?
+1. Consultar códigos de distritos
+2. Consultar códigos de barrios
+3. Consultar códigos de calles
+4. Accion específica filtrada por zona/tiempo/tipo
+5. Salir
+-->3
+ - 3100: Carrer_de_l'Agregació
+ - 359700: Carrer_de_Vidal_i_Guasch
+ - 701268: Ronda_de_Dalt_(Llobregat)
+ - 701433: Ronda_del_Mig_(Ascendent)
+ - 701498: Carretera_B-10_(Besòs)
+ - 701919: Túnel_de_les_Glòries_(Llobregat)
+ - 701267: Ronda_de_Dalt_(Besòs)
+ - 701502: Carretera_B-20_(Besòs)
+ - 198804: Avinguda_del_Paral·lel
+ - 144601: Avinguda_Diagonal
+ - 353500: Carrer_de_Vallmajor
+ - 161101: Carrer_de_la_Independència
+ - 349706: Carrer_del_Comte_d'Urgell
+ - 700445: Plaça_dels_Països_Catalans
+ - 701917: Túnel_de_la_Rovira_(ascendent)
+ - 701434: Ronda_del_Mig_(Descendent)
+ - 701918: Túnel_de_la_Rovira_(descendent)
+ - 701177: Plaça_de_Monterrey
+ - 177101: Via_Laietana
+ - 197302: Carrer_de_la_Marina
+ - 23403: Carrer_d'Aribau
+ - 100800: Carrer_de_la_Diputació
+ - 226400: Carrer_de_Las_Navas_de_Tolosa
+ - 76807: Carrer_de_Sardenya
+ - 169409: Gran_Via_de_les_Corts_Catalanes
+ - 209900: Avinguda_Meridiana
+ - 701497: Carretera_B-10_(Llobregat)
+ - 34308: Carrer_la_Rambla
+ - 189803: Carrer_de_Maó
+ - 278200: Avinguda_de_la_Reina_Maria_Cristina
+ - 153205: Rambla_de_Guipúscoa
+ - 127205: Carrer_de_la_Flor_de_Neu
+ - 312400: Carrer_de_Sants
+ - 194202: Carrer_del_Mar
+ - 700128: Carrer_Longitudinal_6
+ - 370407: Carrer_Número_5_Zona_Franca
+ - 18505: Carrer_d'Aragó
+ - 701265: Ronda_Litoral_(Besòs)
+ - 230601: Carrer_de_la_Mare_de_Déu_de_Port
+ - 352507: Passeig_de_la_Vall_d'Hebron
+ - 296508: Ronda_de_Sant_Antoni
+ - 89707: Carrer_de_la_Constitució
+ - 256605: Carrer_del_Pintor_Fortuny
+ - 221203: Carrer_de_Moragas
+ - 349309: Ronda_de_la_Universitat
+ - 145003: Carrer_de_Girona
+ - 346800: Rambla_del_Poblenou
+ - 300503: Carrer_de_Sant_Feliu_de_Codines
+ - 229806: Carrer_de_la_Mare_de_Déu_dels_Àngels
+ - 700134: Carrer_Transversal_8
+ - 197903: Passeig_Marítim_de_la_Barceloneta_-_Oriol_Bohigas_i_Guardiola
+ - 187207: Avinguda_de_Madrid
+ - 343903: Travessera_de_les_Corts
+ - 359200: Avinguda_de_Pedralbes
+ - 261900: Carrer_de_Ponce_de_León
+ - 30409: Carrer_de_Bac_de_Roda
+ - 305100: Passeig_de_Sant_Joan
+ - 701379: Carrer_Número_28
+ - 166003: Carrer_de_Jaume_Roig
+ - 269108: Plaça_del_Portal_de_la_Pau
+ - 30089: Carrer_B_Zona_Franca
+ - 61504: Carrer_de_Canyameres
+ - 700884: Plaça_dels_Voluntaris_Olímpics
+ - 351901: Passeig_de_Valldaura
+ - 191204: Carrer_de_Mallorca
+ - 375706: Carrer_Número_60_Zona_Franca
+ - 32700: Carrer_de_Balmes
+ - 28000: Via_Augusta
+ - 321401: Carrer_de_Scala_Dei
+ - 362602: Carrer_de_Vilardell
+ - 244901: Carrer_de_Parcerisa
+ - 80203: Carrer_de_la_Ciutat_de_Balaguer
+ - 86108: Carrer_de_Concepción_Arenal
+ - 329505: Carrer_del_Tajo
+ - 130403: Carrer_de_Fontanella
+ - 307604: Carrer_de_Sant_Medir
+ - 700654: Avinguda_del_Litoral
+ - 13501: Carrer_de_l'Amargor
+ - 30602: Rambla_de_Badal
+ - 40300: Carrer_de_Berlín
+ - 185100: Camí_de_la_Lliça
+ - 44403: Carrer_de_Bolívia
+ - 27608: Carrer_d'Atenes
+ - 180: Carrer_A_Zona_Franca
+ - 185700: Carrer_del_Llobregós
+ - 200600: Carrer_del_Marroc
+ - 132908: Carrer_de_Ramon_Trias_Fargas
+ - 142402: Carrer_de_Gavà
+ - 350308: Carrer_de_València
+ - 700130: Carrer_Longitudinal_10
+ - 297001: Carrer_de_Sant_Antoni_Maria_Claret
+ - 266100: Carrer_de_Prat_d'en_Roquer
+ - 202504: Carrer_de_Mascaró
+ - 132806: Carrer_de_Francesc_Alegre
+ - 263407: Carrer_de_Portbou
+ - 701432: Carretera_C-17_(Barcelona)
+ - 187706: Carrer_de_la_Mestrança
+ - 353805: Avinguda_de_Vallvidrera
+ - 279203: Carrer_de_Renart
+ - 201400: Passeig_de_Picasso
+Se han mostrado las calles 0-99/2836 . Desea mostrar las siguientes 100? (S/N)
+ -->N
+¿Qué quiere hacer?
+1. Consultar códigos de distritos
+2. Consultar códigos de barrios
+3. Consultar códigos de calles
+4. Accion específica filtrada por zona/tiempo/tipo
+5. Salir
+-->4
+A continuación debes introducir los datos para filtrar las denuncias (especifica solo aquellos valores necesarios):
+
+Para introducir los datos tenga en cuenta:
+- Para no especificar algun parámetro numérico, simplemente escriba -1
+- No escribas carácteres que no sean números ( -1 se incluye) excepto que se especifique lo contrario
+- No dejes valores vacios
+ Introduce el año, el mes, el dia, la hora y minuto, separados por espacios ( ej: 2024 11 3 13 -1) -->-1 -1 -1 -1 -1
+Desea especificar zona? (1=sí 0=No) --> 1
+Introduce el código de calle, número de calle, código de distrito, código de barrio y sección censal (ej: 701433 -1 4 19 -1 )144601 -1 -1 -1 -1
+Introduce coordenadas, Longitud y Latitud (ej 2.176944 41.423317 ) -->-1 -1
+Desea especificar tipo de sanción? (1=Sí 0=No) --> 0
+Ha requerido de una grua? (1=Sí; 0=No; -1=No se especifíca) -->-1
+Se han introducido los siguientes datos:
+
+(Los valores en -1 significan un valor indefinido)
+Fecha: -/-/- a las -:-
+Ubicación: -1
+Avinguda_Diagonal
+Distrito: Indefinido
+Barrio: Indefinido
+Lat: -1
+Lon:-1,
+S.C: -1
+Grua: No especificado
+Codigo_infraccion: -1
+Importe: -1
+Subtipo_expediente: -1
+Medio_imposicion: -1
+Tipo_vehiculo: -1
+Son correctos? (1=Sí 0=No) -->1
+Se han encontrado 8255 denuncias
+¿Qué quiere hacer?
+1. Consultar el mes y el día con más recaudación/infracciones.
+2. Consultar el número de veces que se ha requerido el uso de una grúa.
+3. Consultar cuál es la denuncia más común.
+4. Consultar el número de denuncias registradas por el código.
+5. Consultar cuál es el medio de imposición más común.
+6. Consultar el número de denuncias registradas por el medio de imposición.
+7. Salir
+ --> 1
+Día con la mayor recaudación: 20/10 con 22710 euros recaudados.
+Mes con la mayor recaudación: 12 con 373290 euros recaudados.
+Día con el mayor número de infracciones: 24/11 con 170 infracciones.
+Mes con el mayor número de infracciones: 12 con 3053 infracciones.
+
+¿Qué quiere hacer?
+1. Consultar el mes y el día con más recaudación/infracciones.
+2. Consultar el número de veces que se ha requerido el uso de una grúa.
+3. Consultar cuál es la denuncia más común.
+4. Consultar el número de denuncias registradas por el código.
+5. Consultar cuál es el medio de imposición más común.
+6. Consultar el número de denuncias registradas por el medio de imposición.
+7. Salir
+ --> 7
+¿Qué quiere hacer?
+1. Consultar códigos de distritos
+2. Consultar códigos de barrios
+3. Consultar códigos de calles
+4. Accion específica filtrada por zona/tiempo/tipo
+5. Salir
+-->5
+
+Selecciona el tipo de accion desea hacer:
+1. Acciones básicas sobre la entidad "1: infracciones/denuncias Barcelona"
+2. Acciones básicas sobre la entidad "2: tipos de multas"
+3. Acciones básicas sobre la entidad "3: medio imposición"
+4. A. Específicas: Diagnóstico de denuncias en Barcelona
+5. A. Específicas: Diagnóstico de denuncias en una zona específica
+6. A. Específicas: Validación de datos
+7. Salir del programa
+ --> 5
+
+¿Qué quiere hacer?
+1. Consultar códigos de distritos
+2. Consultar códigos de barrios
+3. Consultar códigos de calles
+4. Accion específica filtrada por zona/tiempo/tipo
+5. Salir
+-->4
+A continuación debes introducir los datos para filtrar las denuncias (especifica solo aquellos valores necesarios):
+
+Para introducir los datos tenga en cuenta:
+- Para no especificar algun parámetro numérico, simplemente escriba -1
+- No escribas carácteres que no sean números ( -1 se incluye) excepto que se especifique lo contrario
+- No dejes valores vacios
+ Introduce el año, el mes, el dia, la hora y minuto, separados por espacios ( ej: 2024 11 3 13 -1) -->-1 -1 -1 -1 -1
+Desea especificar zona? (1=sí 0=No) --> 1
+Introduce el código de calle, número de calle, código de distrito, código de barrio y sección censal (ej: 701433 -1 4 19 -1 )144601 -1 -1 -1 -1
+Introduce coordenadas, Longitud y Latitud (ej 2.176944 41.423317 ) -->-1 -1
+Desea especificar tipo de sanción? (1=Sí 0=No) --> 0
+Ha requerido de una grua? (1=Sí; 0=No; -1=No se especifíca) -->-1
+Se han introducido los siguientes datos:
+
+(Los valores en -1 significan un valor indefinido)
+Fecha: -/-/- a las -:-
+Ubicación: -1
+Avinguda_Diagonal
+Distrito: Indefinido
+Barrio: Indefinido
+Lat: -1
+Lon:-1,
+S.C: -1
+Grua: No especificado
+Codigo_infraccion: -1
+Importe: -1
+Subtipo_expediente: -1
+Medio_imposicion: -1
+Tipo_vehiculo: -1
+Son correctos? (1=Sí 0=No) -->1
+Se han encontrado 8255 denuncias
+¿Qué quiere hacer?
+1. Consultar el mes y el día con más recaudación/infracciones.
+2. Consultar el número de veces que se ha requerido el uso de una grúa.
+3. Consultar cuál es la denuncia más común.
+4. Consultar el número de denuncias registradas por el código.
+5. Consultar cuál es el medio de imposición más común.
+6. Consultar el número de denuncias registradas por el medio de imposición.
+7. Salir
+ --> 1
+Día con la mayor recaudación: 20/10 con 22710 euros recaudados.
+Mes con la mayor recaudación: 12 con 373290 euros recaudados.
+Día con el mayor número de infracciones: 24/11 con 170 infracciones.
+Mes con el mayor número de infracciones: 12 con 3053 infracciones.
+
+¿Qué quiere hacer?
+1. Consultar el mes y el día con más recaudación/infracciones.
+2. Consultar el número de veces que se ha requerido el uso de una grúa.
+3. Consultar cuál es la denuncia más común.
+4. Consultar el número de denuncias registradas por el código.
+5. Consultar cuál es el medio de imposición más común.
+6. Consultar el número de denuncias registradas por el medio de imposición.
+7. Salir
+ --> 3
+La denuncia más común tiene como código 1210 y ha tenido 4798 incidencias, hecho que representa el 58.1223% de las denuncias.
+¿Desea consultar información sobre este tipo de denuncia (S o N)?
+ --> S
+¿Cómo quiere ver las descripciones de la infracción? (En catalán (0) o en español (1))
+ --> 1
+DescCurtaES: CIRCULA CON EXCESO DE VELOCIDAD POR RAZON DE VIA
+DescLlargaES: -
+Normativa: RGC
+Importe nominal: 100 euros.
+Tipo: En movimiento
+Puntos a retirar: 0
+
+¿Qué quiere hacer?
+1. Consultar el mes y el día con más recaudación/infracciones.
+2. Consultar el número de veces que se ha requerido el uso de una grúa.
+3. Consultar cuál es la denuncia más común.
+4. Consultar el número de denuncias registradas por el código.
+5. Consultar cuál es el medio de imposición más común.
+6. Consultar el número de denuncias registradas por el medio de imposición.
+7. Salir
+ -->

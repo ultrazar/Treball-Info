@@ -1,0 +1,6 @@
+ID ENTIDAD OPERACION DETALLE
+1 General Programa_inicializado -
+2 Especificas-filtradas-por-zona - -
+3 Especifica MesDiaConMasRecaudacion -
+4 Especificas-filtradas-por-zona - -
+5 Especifica MesDiaConMasRecaudacion -
